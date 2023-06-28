@@ -5,14 +5,13 @@
 
         //twilio
         $sid = 'AC5817ca6fa49d1d61353b7727ca0611ac';
-        $token = 'fa430db4f797c8a16f569ce42a9bd933';
+        $token = 'c2691b4c539019f5d97de92c02e166a1';
 
         $client = new Twilio\Rest\Client($sid, $token);
 
-       /* $message = $client->messages->create(
-
-        
-        $_POST['phone'], array(
+        $message = $client->messages->create(
+          
+            $_POST['phone'], array(
             'from' => '+14075373124',
             'body' => $_POST['message']
             
@@ -34,7 +33,7 @@
         }
 
         
-*/
+
     }
     ?>
 <div class="container">
@@ -117,13 +116,14 @@
               </div>
   
               <div class="col text-center">
-              <a class="btn btn-secondary font-weight-bold  w-100 text-dark" href="<?=ROUTE?>/explore">More 1+</a>
+              <a href="notifications-2" class="btn btn-transparent w-100 bg-secondary border-0 text-light">More +1</a>
               </div>
           </div>
         </form>
     
   </div>
   </div>
+
 
 
   <div class="col bg-gray">

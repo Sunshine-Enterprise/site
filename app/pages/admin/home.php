@@ -1,10 +1,11 @@
 <?php
-          
-if(isset($_SESSION['login'])){
-    echo $_SESSION['login'];
-    unset($_SESSION['login']);
-}
 
+?> <div class="container"><?php
+    if(isset($_SESSION['login'])){
+      echo $_SESSION['login'];
+      unset($_SESSION['login']);
+  }        
+ ?></div><?php
 
 $query = "Select count(id) as num from jobs";
 $jobs = query_row($query);
@@ -44,6 +45,7 @@ elseif($permission['role'] == 'developer'){
 }
 
 ?>
+
 
 
 

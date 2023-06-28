@@ -15,7 +15,17 @@
   <meta name="generator" content="Themefisher Classified Marketplace Template v1.0">
 
 	<!-- favicon -->
-	<link href="<?=ROUTE?>/assets/image/favicons/android-chrome-144x144.png" rel="shortcut icon">
+	<link href="<?=ROUTE?>/assets/image/favicons/android-chrome-144x144.png" rel="icon">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D56MEQ917T"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-D56MEQ917T');
+    </script>
 
 	<!-- 
 	Essential stylesheets
@@ -28,19 +38,19 @@
 	<link href="<?=ROUTE?>/assets/plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
 	<link href="<?=ROUTE?>/assets/css/styles_sunshine.css" rel="stylesheet">
 	<link href="<?=ROUTE?>/assets/css/style.css" rel="stylesheet">
-
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 <body class="body-wrapper">
 
 
 <header>
-<?php
+    <?php
           
           if(isset($_SESSION['request'])){
             echo $_SESSION['request'];
             unset($_SESSION['request']);
-          }
+    }
           
         ?>
 	<div class="container">
@@ -61,8 +71,6 @@
 								<a class="nav-link" href="about">About</a>
 							</li>
 
-							
-
 							<li class="nav-item">
 							<a class="nav-link" href="team">Team</a>
 							</li>
@@ -71,11 +79,11 @@
 							<a class="nav-link" href="blog">Blog</a>
 							</li>
 							
-
-
 							<li class="nav-item dropdown dropdown-slide @@dashboard"></li>
+							
+							<!------------------------------------------------------------------>
 							<li class="nav-item  @@pages">
-								<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<a class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Jobs <span><i class="fa fa-angle-down"></i></span>
 								</a>
 								<!-- Dropdown list -->
@@ -85,7 +93,7 @@
 									<div class="col-md-6 col-lg-6 mb-3 mb-lg-6">
 									<div class="list-group list-group-flush">
 									<?php
-									$query = "select * from industries order by IndustryId desc";
+									$query = "select * from industries where disabled = 1 order by IndustryId desc limit 4";
 									$rows = query($query);
 									?>
 										
@@ -94,7 +102,7 @@
 										foreach($rows as $row):
 											?>
 										<ul class="category-list  bg-warning ml-4 rounded rounded-4">
-											<a href="" class="dropdown-item"><?=$row['Nameindustry']?></a>
+											<a href="industry/<?=$row['slug']?>" class="dropdown-item"><?=$row['Nameindustry']?></a>
 										</ul>
 													
 									</div>
@@ -106,7 +114,7 @@
 									}else{
 									?>
 												<ul class="category-list">
-													<a href="" class="dropdown-item fw-bold"><?=$row['Nameindustry']?></a>
+												<a href="industry/<?=$row['slug']?>" class="dropdown-item fw-bold"><?=$row['Nameindustry']?></a>
 												</ul>										<?php
 										} 
 										?>
@@ -115,13 +123,8 @@
 								</div>
 								</div>
 							</div>
-
-
-							
-								
-							
-									
 							</li>
+							<!------------------------------------------------------------------>
 
 						</ul>
 						<ul class="navbar-nav ml-auto mt-10">
@@ -139,15 +142,14 @@
 	</div>
 </header>
 
-
     <!--====================================
     =            New Section             =
     =====================================-->
-	<div class="bg-image" style="background-image: url('<?=ROUTE?>/assets/image/jumbotron2.png');  background-position: center; background-repeat:no-repeat; background-size: cover;">
+<div class="bg-image" style="background-image: url('<?=ROUTE?>/assets/image/jumbotron2.png');  background-position: center; background-repeat:no-repeat; background-size: cover; max-width: 100% !important; max-height: 100% !important;">
 		<div class="col-md-6">
 			<div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-250 position-relative">
 				<div class="col p-4 d-flex flex-column position-static ">
-					<strong class="d-inline-block mb-2 text-primary-emphasis h1  px-4 text-light py-3  rounded rounded-3 font-weight-light font-weight-bold sm-bg-pirmary" style="" >Join us & Explore our Jobs</strong>
+					<strong class="d-inline-block mb-2 text-primary-emphasis h1  px-4 text-warning py-3  rounded rounded-3 font-weight-light font-weight-bold" style="">Join us & Explore our Jobs</strong>
 					<p class="card-text mb-auto justify-content-center px-4 h4 text-light text-light py-3 font-italic">Whether you are seeking top talent, to begin a career at your dream company, we can help you.</p>
 					
 					<br>
@@ -159,14 +161,60 @@
 			</div>
 		</div>
 	</div>
-	
+    <!--====================================
+    =            New Section             =
+    =====================================-->
 
-  <!--====================================
+
+<section class=" section pt-2 pb-3">
+
+		<!-- Container Start -->
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<!-- Section title -->
+					<div class="section-title">
+						<h2>Search</h2>
+						<p class='fw-bold'>Enter keywords or Strings</p>
+					
+
+					<div class="advance-search mb-3">
+						<div class="container">
+							<div class="row justify-content-center">
+								<div class="col-lg-12 col-md-12 align-content-center">									
+									<form role="search" action='<?=ROUTE?>/search'>
+											<div class="form-row align-items-center">
+												<div class="form-group col-xl-8 col-lg-8 col-md-8">
+												<input type="search" name='find' value="<?php $_GET['find'] ?? ''?>" class="form-control my-2 my-lg-0" id="inputtext4" placeholder="What do you need?">
+											</div>
+											<div class="form-group col-xl-4 col-lg-4 col-md-4"> 
+													<button type="submit" class="btn btn-wa active w-100 bg-warning">Search Now</button>
+											</div>
+											</div>
+											<?php
+											if(empty($_GET['find'])){
+
+											}		
+											?>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+<!--====================================
 	=    New Section Popular Jobs     =
 =====================================-->
 	<section class="popular-deals section bg-gray pt-1">
 	<div class="container">
-		<div class="row">
+		<div class="row" >
 			<div class="col-md-12">
 				<div class="section-title justify-content-center mb-1">
 					<h3 class="text-dark font-weight-light h1 pt-4">Latest jobs</h3>
@@ -215,117 +263,163 @@
 =            Popular deals section            =
 ============================================-->
 	
-
-
-	<section class="section pt-2">
-		<!-- Container Start -->
-					<section class="page-title bg-white ">
-				<!-- Container Start -->
-				<div class="container">
-					<div class="row">
-						<div class="col-md-8 offset-md-2 text-center ">
-							<!-- Title text -->
-							<h3 class="text-dark font-weight-light">Talent Solutions</h3>
-					<p class="pt-3 font-italic h4">Our ongoing commitment is connection – bringing together great people and great organizations to build successful relationships.</p>
-						</div>
-					</div>
-				</div>
-				<!-- Container End -->
-			</section>	
-			
-			
-		<div class="container pt-5">
-			<div class="row">
-
-				<div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-4"">
-					<div class="card vh-25">
-					<img class="card-img-top" src="<?=ROUTE?>/assets/image/executive.png" alt="Card image cap">	
-					<div class="card-body">
-						<h5 class="card-title">PUBLIC SECTOR</h5>
-					</div>
-					</div>
-				</div>
-				
-				<div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-4"">
-					<div class="card vh-25">
-					<img class="card-img-top" src="<?=ROUTE?>/assets/image/partners.png" alt="Card image cap">
-					<div class="card-body">
-						<h5 class="card-title">PRIVATE SECTOR</h5>
-					</div>
-					</div>
-				</div>
-
-				<div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-4"">
-					<div class="card vh-25">
-					<img class="card-img-top" src="<?=ROUTE?>/assets/image/contract.png" alt="Card image cap">
-					<div class="card-body">
-						<h5 class="card-title">EXECUTIVE SEARCH</h5>
-					</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-4">
-					<div class="card vh-25">
-					<img class="card-img-top" src="<?=ROUTE?>/assets/image/office.jpg" alt="Card image cap">	
-					<div class="card-body">
-						<h5 class="card-title">CONTRACTING STAFFING</h5>
-					</div>
-					</div>
-				</div>
-				
-				<div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-4">
-					<div class="card vh-25">
-					<img class="card-img-top" src="<?=ROUTE?>/assets/image/temp.png" alt="Card image cap">
-					<div class="card-body">
-						<h5 class="card-title">TEMPORARY STAFFING</h5>
-					</div>
-					</div>
-				</div>
-
-				<div class="col-lg-4 col-md-6 col-sm-6 col-12 mt-4">
-					<div class="card vh-25">
-					<img class="card-img-top" src="<?=ROUTE?>/assets/image/meeting.jpg" alt="Card image cap">
-					<div class="card-body">
-						<h5 class="card-title">PARTHNERS & STAKEHOLDERS</h5>
-					</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-
-    <!--====================================
-    =            New Section             =
-    =====================================-->
-
 	
 
-	<section class="call-to-action overly bg-3 section-sm">
-		<!-- Container Start -->
-		<div class="container">
-			<div class="row justify-content-md-center text-center">
-				<div class="col-md-8">
-					<div class="content-holder">
-						<h2>Get support you need</h2>
-						<ul class="list-inline mt-30">
-							<li class="list-inline-item "><a class="btn btn-main bg-warning" href="request">
-								Find Talent
-							</a></li>
-							<li class="list-inline-item"><a class="btn btn-secondary" href="<?=ROUTE?>/explore">Find a Job</a></li>
-						</ul>
+
+<section class="popular-deals section bg-light">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="section-title">
+					<h3 class="text-dark font-weight-light h1">Talent Solutions</h3>
+					<p class="pt-3 font-italic h4"></p>
+					
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<!-- offer 01 -->
+			<div class="col-lg-12">
+				<div class="trending-ads-slide">
+					<div class="col-sm-12 col-lg-4">
+						<!-- product card -->
+						<div class="product-item bg-light">
+	<div class="card">
+		<div class="thumb-content">
+			<!-- <div class="price">$200</div> -->
+			<a href="">
+				<img class="card-img-top img-fluid" src="<?=ROUTE?>/assets/image/meeting.jpg" alt="Card image cap">
+			</a>
+		</div>
+		<div class="card-body">
+		    <h4 class="card-title"><a href="">Public Sector</a></h4>
+		    <ul class="list-inline product-meta">
+		    	<li class="list-inline-item">
+		    		<a href=""><i class="fa fa-bullhorn"></i>Recluiting</a>
+		    	</li>
+		    	<li class="list-inline-item">
+		    		<a href="#"><i class="fa fa-users"></i>In state</a>
+		    	</li>
+		    </ul>
+		    <p class="card-text"></p>
+		   
+		</div>
+	</div>
+</div>
+
+
+
+					</div>
+					<div class="col-sm-12 col-lg-4">
+						<!-- product card -->
+<div class="product-item bg-light">
+	<div class="card">
+		<div class="thumb-content">
+			<!-- <div class="price">$200</div> -->
+			<a href="">
+				<img class="card-img-top img-fluid" src="<?=ROUTE?>/assets/image/partners.png" alt="Card image cap">
+			</a>
+		</div>
+		<div class="card-body">
+		    <h4 class="card-title"><a href="">Human Resourses</a></h4>
+			<ul class="list-inline product-meta">
+		    	<li class="list-inline-item">
+		    		<a href="single"><i class="fa fa-bullhorn"></i>Recluiting</a>
+		    	</li>
+		    	<li class="list-inline-item">
+		    		<a href="#"><i class="fa fa-users"></i>In State</a>
+		    	</li>
+		    </ul>
+		    <p class="card-text"></p>
+		   
+		</div>
+	</div>
+</div>
+
+
+
+					</div>
+					<div class="col-sm-12 col-lg-4">
+						<!-- product card -->
+<div class="product-item bg-light">
+	<div class="card">
+		<div class="thumb-content">
+			<!-- <div class="price">$200</div> -->
+			<a href="">
+				<img class="card-img-top img-fluid" src="<?=ROUTE?>/assets/image/contract.png" alt="Card image cap">
+			</a>
+		</div>
+		<div class="card-body">
+		    <h4 class="card-title"><a href="">Private Sector</a></h4>
+		    <ul class="list-inline product-meta">
+		    	<li class="list-inline-item">
+		    		<a href=""><i class="fa fa-bullhorn"></i>Recluiting</a>
+		    	</li>
+		    	<li class="list-inline-item">
+		    		<a href="#"><i class="fa fa-users"></i>In State</a>
+		    	</li>
+		    </ul>
+		    <p class="card-text"></p>
+		  
+		</div>
+	</div>
+</div>
+
+
+
+					</div>
+					<div class="col-sm-12 col-lg-4">
+						<!-- product card -->
+<div class="product-item bg-light">
+	<div class="card">
+		<div class="thumb-content">
+			<!-- <div class="price">$200</div> -->
+			<a href="">
+				<img class="card-img-top img-fluid" src="<?=ROUTE?>/assets/image/office.jpg" alt="Card image cap">
+			</a>
+		</div>
+		<div class="card-body">
+		    <h4 class="card-title"><a href="">Contracts</a></h4>
+		    <ul class="list-inline product-meta">
+		    	<li class="list-inline-item">
+		    		<a href=""><i class="fa fa-bullhorn"></i>Recluiting</a>
+		    	</li>
+		    	<li class="list-inline-item">
+		    		<a href="#"><i class="fa fa-users"></i>In State</a>
+		    	</li>
+		    </ul>
+		    <p class="card-text"></p>
+		   
+		</div>
+	</div>
+</div>
+
+
+
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
 
-<!--============================
-=            Footer            =
-=============================-->
+
 <?php
 
 include '../app/pages/includes/footer.php';
 
 ?>
+
+<style>
+  .form-control:focus{
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(247, 228, 130, 0.84);
+
+  }
+
+  html, body{
+  height:100%
+}
+</style>
 
 </html>
