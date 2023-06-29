@@ -12,7 +12,6 @@ if(!empty($_POST))
 </div>';
   $query = "SELECT * FROM users where email = :email && status = 1 limit 1";
 
-  
 $row = query($query, ['email'=>$_POST['email']]);
 
   if($row)
@@ -37,7 +36,7 @@ $row = query($query, ['email'=>$_POST['email']]);
         $errors['password'] = "Please verify your email";
       }
 
-  }else{
+  } {
     $errors['email'] =  "Please verify your password";
   }
 }
@@ -97,7 +96,7 @@ include '../app/pages/includes/header_general.php';
               </div>
               </div>
               <button type="submit" class="btn btn-warning font-weight-bold mt-3">Log in</button>
-              <a class="mt-3 d-block text-warning" href="forgot">Forget Password?</a>
+              <a class="mt-3 d-block text-warning" href="recover">Forget Password?</a>
               <a class="mt-3 d-inline-block text-warning" href="signup">Register Now</a>
             </fieldset>
           </form>

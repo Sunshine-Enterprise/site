@@ -5,7 +5,7 @@
 
         //twilio
         $sid = 'AC5817ca6fa49d1d61353b7727ca0611ac';
-        $token = 'c2691b4c539019f5d97de92c02e166a1';
+        $token = 'b19c889c75d3fe429ca4f2daa949460e';
 
         $client = new Twilio\Rest\Client($sid, $token);
 

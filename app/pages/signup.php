@@ -158,7 +158,7 @@ if(empty($_POST['terms'])){
     $data['date'] = $date_current;
     $data['role'] = "user";
 
-    $verify_token = rand(11111,99999);
+    $verify_token = md5(rand(11111,99999));
     $data['token'] = $verify_token;
 
     
@@ -333,19 +333,19 @@ redirect('login');
                 <div class="input-group">
                   <div class="input-group-text border rounded-0 border-right-0"> <i class="fa fa-lock" ></i></div>
                     <input value="<?=old_value('password1')?>" class="form-control" type="password" placeholder="Password*" name="password1" >
-                <?php if(!empty($errors['password1'])):?>
-                  <div class="text-danger mb-3"><?='* '.$errors['password1']?></div>
-                <?php endif; ?>
                   </div> 
+                  <?php if(!empty($errors['password1'])):?>
+                    <div class="text-danger mb-3"><?='* '.$errors['password1']?></div>
+                  <?php endif; ?>
                   </div> 
                 <div class="col">
                 <div class="input-group">
                   <div class="input-group-text border rounded-0 border-right-0"> <i class="fa fa-lock" ></i></div> 
                     <input value="<?=old_value('password2')?>" class="form-control" type="password" placeholder="Verify your Password*" name="password2">
-                <?php if(!empty($errors['password2'])):?>
-                  <div class="text-danger mb-3"><?='* '.$errors['password2']?></div>
-                <?php endif; ?>
                   </div>
+                  <?php if(!empty($errors['password2'])):?>
+                    <div class="text-danger mb-3"><?='* '.$errors['password2']?></div>
+                  <?php endif; ?>
                   </div>
 
               </div>
