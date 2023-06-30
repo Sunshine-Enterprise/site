@@ -73,7 +73,7 @@
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                     <option value="employeer"> Employeer </option>
-                    <option value="developer">Developer</option>
+                    <option value="recluiter">Recluiter</option>
                   </select>
                   <?php if(!empty($errors['role'])):?>
                   <div class="text-danger mb-3">
@@ -248,7 +248,7 @@
                    <option <?=old_select('role','user',$row['role'])?> value="user">User</option>
                     <option <?=old_select('role','admin',$row['role'])?> value="admin">Admin</option>
                     <option <?=old_select('role','employeer',$row['role'])?> value="employeer"> Employeer </option>
-                    <option <?=old_select('role','developer',$row['role'])?> value="developer">Developer</option>
+                    <option <?=old_select('role','recluiter',$row['role'])?> value="recluiter">Recluiter</option>
                 </select>              
               </div>
             </div>
@@ -353,9 +353,9 @@ $rows = query($query);
                     
                     echo'<p class="bg-primary text-light border rounded p-2 text-center">admin<p>';
                   
-                  }elseif($row['role'] == 'developer'){
+                  }elseif($row['role'] == 'recluiter'){
                     
-                    echo'<p class="bg-info text-light border rounded p-2 text-center">developer<p>';
+                    echo'<p class="bg-info text-light border rounded p-2 text-center">Recluiter<p>';
                   
                   }
                   

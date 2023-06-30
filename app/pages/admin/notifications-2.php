@@ -36,18 +36,18 @@
 
 
 
-  <div class="col bg-gray">
+  <div class="col-6 bg-gray">
     <?php
-      $query = "SELECT * FROM notifications order by id ";
-
+      $query = "SELECT u.email, n.date_user, n.phone, n.message FROM notifications as n inner join users as u on n.user_id = u.id limit 7";
       $rows = query($query);
     ?>
     <section class="advt-post py-5">
       <div class="container">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" class="">
         <div class="col">
             <h3>History of messages</h3>
           </div>
+          <div class="table-responsive">
           <table class="table">
   <thead>
 
@@ -63,16 +63,17 @@
   <tbody>
   <?php if(!empty($rows)):?>
   <?php foreach($rows as $row):?>
-    <tr>
+    <tr class="">
       <th scope="col">
       </th>
-      <td scope="col"><?=$row['user_id']?></td>
-      <td scope="col"><?=$row['message']?></td>
+      <td scope="col"><?=$row['email']?></td>
+      <td scope="col" class="" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:10px; "><?=$row['message']?></td>
       <td scope="col"><?=$row['phone']?></td>
     </tr>
   <?php endforeach;  ?>
   <?php  endif; ?>  
   </tbody>
+  </div>
 </table>
         </form>
       </div>

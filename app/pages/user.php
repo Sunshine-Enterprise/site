@@ -91,11 +91,6 @@ if($section =='download'){
 					</button>
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav ml-auto main-nav ">
-
-							<?php
-              echo '<pre>';
-              print_r($_GET['url']);
-              ?>
 							
 						</ul>
 						<ul class="navbar-nav ml-auto mt-10">
@@ -206,6 +201,7 @@ if($section =='download'){
 
         <div class="widget user-dashboard-menu">
         <?php
+
             require_once $filename;
           
         ?>

@@ -90,13 +90,7 @@ if($section =='download'){
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav ml-auto main-nav ">
-
-							<?php
-              echo '<pre>';
-              print_r($_GET['url']);
-              ?>
-							
+						<ul class="navbar-nav ml-auto main-nav ">							
 						</ul>
 						<ul class="navbar-nav ml-auto mt-10">
 							<li class="nav-item">
@@ -131,81 +125,15 @@ if($section =='download'){
           
           <!-- delete-account modal -->
           <!-- delete account popup modal start-->
-<!-- Modal -->
-<div class="modal fade" id="deleteaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body text-center">
-        <img src="<?=ROUTE?>/assets/images/account/Account1.png" class="img-fluid mb-2" alt="">
-        <h6 class="py-2">Are you sure you want to delete your account?</h6>
-        <p>Do you really want to delete these records? This process cannot be undone.</p>
-        <textarea class="form-control" name="message" id="" cols="40" rows="4" class="w-100 rounded"></textarea>
-      </div>
-      <div class="modal-footer border-top-0 mb-3 mx-5 justify-content-center">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
         </div>
       </div>
       <div class="col-lg-8">
         <!-- Dashboard Links -->
-        <?php 
-        $id = user('id');
 
-        $query = "Select role FROM users where id = $id";
-        $permission = query_row($query);
-        if($permission['role'] == 'admin'){
-        ?>
-        <div class="widget user-dashboard-menu">
-          <ul>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/users"><i class="fa fa-user-circle"></i> Users</a></li>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li ><a href="<?=ROUTE?>/admin/jobs"><i class="fa fa-bullhorn"></i> My Jobs</a></li>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/employeers"><i class="fa fa-users"></i> Employeers</a></li>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/industries"><i class="fa fa-sitemap"></i>Industries</a></li>
-              </div>
-              
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/requests"><i class="fa fa-bolt"></i>Talent Requests</a></li>
-              </div>
-
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/visits"><i class="fa fa-male" aria-hidden="true"></i>Visits</a></li>
-              </div>
-
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/aplications"><i class="fa fa-bolt"></i>Aplications</a></li>
-              </div>
-
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/notifications"><i class="fa fa-phone"></i>Notifications</a></li>
-              </div>
-            </div>
-            <!-- <li><a href="#!" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-wrench"></i>Delete Account</a></li> -->
-          </ul>
-        </div>
-        <?php } ?>
 
         <div class="widget user-dashboard-menu">
         <?php
+        
             require_once $filename;
           
         ?>

@@ -593,8 +593,8 @@ $rows = query($query);
 							</tr>
 						</thead>
 						<tbody>
-                            <?php $i=1; if(!empty($rows)):?>
-                            <?php foreach($rows as $row):?>
+            <?php $i=1; if(!empty($rows)):?>
+            <?php foreach($rows as $row):?>
 							<tr class="">
 								<td scope="row"><?=$i++?></td>
 								<td scope="row"><strong><?=$row['job_name']?></strong></td>

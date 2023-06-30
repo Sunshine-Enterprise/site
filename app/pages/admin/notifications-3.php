@@ -3,24 +3,55 @@
 
 
 if(!empty($_POST)){
+  
+        $errors =[];
+        if( empty($_POST['phone'])){
+            $errors['phone'] = 'Please fill the phone number';
+        }
+        if(empty($_POST['message'])){
+          $errors['message'] = 'Please fill the content message';
+        }
 
-        if(isset($_POST['submit'])){
-            
-            $phones = $_POST['submit'];
-            
-            require '../vendor/autoload.php';
+      if(isset($_POST['submit']) && empty($errors)){
+          
+        //  $phones = $_POST['submit'];
+          
+          require '../vendor/autoload.php';
 
-            //twilio
-            $sid = 'AC5817ca6fa49d1d61353b7727ca0611ac';
-            $token = 'b19c889c75d3fe429ca4f2daa949460e';
-        
-            $client = new Twilio\Rest\Client($sid, $token);
-            
-            foreach ($_POST['phone'] as $key => $val) {
-                
-                $message = $client->messages->create($_POST['phone'][$key], array('from' => '+14075373124','body' => $_POST['message']));             
+          //twilio
+          $sid = 'AC5817ca6fa49d1d61353b7727ca0611ac';
+          $token = 'b19c889c75d3fe429ca4f2daa949460e';
+          $data = [];
+          $data['user_id'] = $user_id = user('id');
+          $data['message'] = $_POST['message'];
+          $data['date_user'] = date('l jS \of F Y');
+          $data['current_date'] = date('Y-m-d');
 
-            }    
+          $client = new Twilio\Rest\Client($sid, $token);
+          
+          foreach ($_POST['phone'] as $key => $val) {
+
+            for ($i=0; $i < $key; $i++) { 
+              $phones[$key] = $val;
+              echo "<pre>";
+              $data['phone'] = $val;
+              //echo $phones[$key];
+              echo "</pre>";
+
+
+              //echo $data['phone'];
+           
+           $query = "INSERT INTO `notifications` (`user_id`, `phone`, `message`, `date_user`, `date`) 
+            values(:user_id, :phone, :message, :date_user, :current_date)";
+            }
+            
+
+           
+           // echo 'hecho';
+           // $message = $client->messages->create($_POST['phone'][$key], array('from' => '+14075373124','body' => $_POST['message']));             
+
+           query($query, $data);    
+          }
     }        
 }
 
@@ -105,18 +136,18 @@ if(!empty($_POST)){
 
 
 
-  <div class="col bg-gray">
+  <div class="col-6 bg-gray">
     <?php
-      $query = "SELECT * FROM notifications order by id ";
-
+      $query = "SELECT u.email, n.date_user, n.phone, n.message FROM notifications as n inner join users as u on n.user_id = u.id limit 7";
       $rows = query($query);
     ?>
     <section class="advt-post py-5">
       <div class="container">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" class="">
         <div class="col">
             <h3>History of messages</h3>
           </div>
+          <div class="table-responsive">
           <table class="table">
   <thead>
 
@@ -132,16 +163,17 @@ if(!empty($_POST)){
   <tbody>
   <?php if(!empty($rows)):?>
   <?php foreach($rows as $row):?>
-    <tr>
+    <tr class="">
       <th scope="col">
       </th>
-      <td scope="col"><?=$row['user_id']?></td>
-      <td scope="col"><?=$row['message']?></td>
+      <td scope="col"><?=$row['email']?></td>
+      <td scope="col" class="" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:10px; "><?=$row['message']?></td>
       <td scope="col"><?=$row['phone']?></td>
     </tr>
   <?php endforeach;  ?>
   <?php  endif; ?>  
   </tbody>
+  </div>
 </table>
         </form>
       </div>
