@@ -34,6 +34,10 @@ if($section =='jobs'){
   require_once '../app/pages/admin/jobs-controller.php';
 
 }
+if($section =='team'){
+  require_once '../app/pages/admin/team-controller.php';
+
+}
 if($section =='download'){
   require_once '../app/pages/admin/download.php';
 

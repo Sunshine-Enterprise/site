@@ -149,7 +149,19 @@ function query_row(string $query, array $data = []){
    return $url;
 }
 
-  
+    function esc($str){
+        return htmlspecialchars($str ?? '');
+    }
+
+    function get_image($file){
+        $file = $file ?? '';
+
+        if(file_exists($file)){
+         return ROUTE.'/'.$file;
+        }
+
+        return ROUTE.'/assets/image/user_profile.png';
+    }
 
 
     function get_pagination_vars(){

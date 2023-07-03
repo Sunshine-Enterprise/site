@@ -24,9 +24,7 @@ function send_email($name, $email, $verify_token){
   //Content
   $mail->isHTML(true);                                  //Set email format to HTML
   $mail->Subject = 'Email Verification Token';
-  $mail->Body    = "<h2>Welcome to Sunshine</h2>
-                    <h3>Dear user</h3><strong> thanks for register:</strong></br>
-                    <a href='http://localhost/verify?token=$verify_token'>Verify you Account here !!</a> ";
+  $mail->Body    = require_once('format');
   $mail->AltBody = 'Year 2023';
 
   $mail->send();

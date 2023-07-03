@@ -22,22 +22,6 @@ header('Location: /login' );
   // copy signup validation
   //----------------------------
 
-if($section == 'users'){
-require_once '../app/pages/admin/users-controller.php';
-
-}else
-if($section =='industries'){
-  require_once '../app/pages/admin/industries-controller.php';
-
-}else
-if($section =='jobs'){
-  require_once '../app/pages/admin/jobs-controller.php';
-
-}
-if($section =='download'){
-  require_once '../app/pages/admin/download.php';
-
-}
 
 ?>
 

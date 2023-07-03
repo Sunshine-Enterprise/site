@@ -36,7 +36,7 @@
     <div class="card">
         <div class="card-body bg-white">
         <a href="<?=ROUTE?>/admin/industries">
-        <h2 class="card-title ">Industries: <?=$user['num'] ?><i class="fa fa-sitemap float-right p-2 rounded rounded-circle bg-warning" aria-hidden="true"></i></h2>
+        <h2 class="card-title ">Industries: <?=$industry['num'] ?><i class="fa fa-sitemap float-right p-2 rounded rounded-circle bg-warning" aria-hidden="true"></i></h2>
         </a>
     </div>
     </div>   
@@ -58,7 +58,7 @@
     <div class="card">
         <div class="card-body bg-white">
         <a href="<?=ROUTE?>/admin/aplications">
-        <h2 class="card-title ">Aplications: <?=$user['num'] ?><i class="fa fa-handshake-o float-right p-1 rounded rounded-circle bg-warning" aria-hidden="true"></i></h2>
+        <h2 class="card-title ">Aplications: <?=$aplication['num'] ?><i class="fa fa-handshake-o float-right p-1 rounded rounded-circle bg-warning" aria-hidden="true"></i></h2>
         </a>
     </div>
     </div>   
@@ -72,7 +72,7 @@
     <div class="card h-100">
         <div class="card-body bg-white">
         <a href="<?=ROUTE?>/admin/employeers">
-        <h2 class="card-title ">Employees: <?=$user['num'] ?><i class="fa fa-black-tie float-right p-2 rounded rounded-circle bg-warning" aria-hidden="true"></i></h2>
+        <h2 class="card-title ">Employees: <?=$employeer['num'] ?><i class="fa fa-black-tie float-right p-2 rounded rounded-circle bg-warning" aria-hidden="true"></i></h2>
         </a>
     </div>
 
