@@ -24,7 +24,9 @@ function send_email($name, $email, $verify_token){
   //Content
   $mail->isHTML(true);                                  //Set email format to HTML
   $mail->Subject = 'Email Verification Token';
-  $mail->Body    = require_once('format');
+  $mail->Body    = "<h2>Welcome to Sunshine</h2>
+                    <h3>Dear user</h3><strong> thanks for register:</strong></br>
+                    <a href='https://seu-usa.com/verify?token=$verify_token'>Verify you Account here !!</a> ";
   $mail->AltBody = 'Year 2023';
 
   $mail->send();
@@ -329,18 +331,24 @@ redirect('login');
 
                 <div class="col">
                 <div class="input-group">
-                  <div class="input-group-text border rounded-0 border-right-0"> <i class="fa fa-lock" ></i></div>
-                    <input value="<?=old_value('password1')?>" class="form-control" type="password" placeholder="Password*" name="password1" >
-                  </div> 
-                  <?php if(!empty($errors['password1'])):?>
-                    <div class="text-danger mb-3"><?='* '.$errors['password1']?></div>
-                  <?php endif; ?>
+                      <input value="<?=old_value('password1')?>" class="form-control" type="password" placeholder="Password*" name="password1" id='password1'>
+                      <div class="input-group-text border rounded-0 border-left-0" >
+                        <i class="fa fa-eye-slash" onclick="pass()" id="icon1" class=''></i>
+                      </div>
+                      <?php if(!empty($errors['password1'])):?>
+                      <div class="text-danger mb-3"><?='* '.$errors['password1']?></div>
+                      <?php endif; ?>
+                      </div> 
+                      
                   </div> 
                 <div class="col">
                 <div class="input-group">
-                  <div class="input-group-text border rounded-0 border-right-0"> <i class="fa fa-lock" ></i></div> 
-                    <input value="<?=old_value('password2')?>" class="form-control" type="password" placeholder="Verify your Password*" name="password2">
+                    <input value="<?=old_value('password2')?>" class="form-control" type="password" placeholder="Confirm your Password*" name="password2" id='password2'>
+                    <div class="input-group-text border rounded-0 border-left-0" >
+                      <i class="fa fa-eye" onclick="pass()" id="icon2"></i>
+                    </div>
                   </div>
+
                   <?php if(!empty($errors['password2'])):?>
                     <div class="text-danger mb-3"><?='* '.$errors['password2']?></div>
                   <?php endif; ?>
@@ -514,6 +522,28 @@ Essential Scripts
 
 <script src="<?=ROUTE?>/assets/js/script.js"></script>
 <script src="<?=ROUTE?>/assets/js/javascript.js"></script>
+
+
+<script>
+
+var x;
+function pass(){
+
+  if(x == 1){
+    document.getElementById('password1').type='password';
+
+
+    x=0;
+  }else{
+    document.getElementById('password1').type='text';
+
+    x=1;
+  }
+}
+
+
+</script>
+
 
 </body>
 

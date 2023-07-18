@@ -4,24 +4,22 @@ if(!login_status())
 //  redirect('login');
 header('Location: /login' );
 }
-
   //define as a root page
   $section = $url[1] ?? 'home';
-          
+
   //define the new action pages on Array
   $action = $url[2] ?? 'view';
   
   // id for edit and delete
   $id = $url[3] ?? '0';
 
-  $filename = "../app/pages/admin/".$section.".php";
+  $filename = "../app/pages/user/".$section.".php";
   if(!file_exists($filename)){
-    $filename = "../app/pages/admin/404.php";
+    $filename = "../app/pages/user/404.php";
   }
 
   // copy signup validation
   //----------------------------
-
 
 ?>
 
@@ -29,8 +27,6 @@ header('Location: /login' );
 
 <html lang="en">
 <head>
-
-  <!-- ** Basic Page Needs ** -->
   <meta charset="utf-8">
   <title>Sunshine</title>
 
@@ -38,15 +34,10 @@ header('Location: /login' );
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Agency HTML Template">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="author" content="Themefisher">
-  <meta name="generator" content="Themefisher Classified Marketplace Template v1.0">
 
 	<!-- favicon -->
 	<link href="<?=ROUTE?>/assets/image/favicons/android-chrome-144x144.png" rel="shortcut icon">
-
-	<!-- 
-	Essential stylesheets
-	=====================================-->
+	<!-- 	Essential stylesheets =====================================-->
 	<link href="<?=ROUTE?>/assets/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
 	<link href="<?=ROUTE?>/assets/plugins/bootstrap/bootstrap-slider.css" rel="stylesheet">
 	<link href="<?=ROUTE?>/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -57,16 +48,14 @@ header('Location: /login' );
 	<link href="<?=ROUTE?>/assets/css/style.css" rel="stylesheet">
 	<!-----CALL TO SUMMER NOTE--------->
   <link href="<?=ROUTE?>/assets/summernote/summernote-lite.min.css" rel="stylesheet">
-
 </head>
-
 <body class="body-wrapper">
 <header>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
 				<nav class="navbar navbar-expand-lg navbar-light navigation">
-					<a class="navbar-brand" href="<?=ROUTE?>/logout">
+					<a class="navbar-brand" href="<?=ROUTE?>/user/home">
 						<img src="<?=ROUTE?>/assets/image/logos/logo1.png" alt="">
 					</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -74,9 +63,53 @@ header('Location: /login' );
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <?php 
+              $user = user('id');
+             // echo $user;
+              $query = "SELECT * FROM users WHERE id = $user && data = 1";
+
+              $profile = query($query);
+                if($profile){ 
+          ?>
 						<ul class="navbar-nav ml-auto main-nav ">
+
+							<li class="nav-item dropdown dropdown-slide @@dashboard">
+								<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Industries<span><i class="fa fa-angle-down"></i></span>
+								</a>
+
+                <?php
+									$query = "select * from industries where disabled = 1 order by IndustryId desc limit 4";
+									$rows = query($query);
+                ?>
+								<!-- Dropdown list -->
+								<ul class="dropdown-menu">
+                <?php
+									if($rows):
+                  foreach($rows as $row):
+                ?>
+								<li><a class="dropdown-item @@dashboardPage" href="/user/industries/<?=$row['Nameindustry'].'/'.$row['IndustryId']?>"><i class="fa fa-industry"></i>  <?=$row['Nameindustry']?> </a></li>
+                <?php 
+                  endforeach; 
+                  endif; 
+                ?>
+								</ul>
+        
+							</li>
 							
+              
+              <li class="nav-item dropdown">
+								<a class="nav-link" href="aplications">Aplications</a>
+							</li>
+
+              
+              <li class="nav-item dropdown">
+								<a class="nav-link" href="profile-controller">Profile</a>
+							</li>
 						</ul>
+            <?php  }else{
+             // echo 'no data';
+            } ?>
+
 						<ul class="navbar-nav ml-auto mt-10">
 							<li class="nav-item">
 								<a class="nav-link login-button" href="<?=ROUTE?>/logout">Log out</a>
@@ -89,113 +122,23 @@ header('Location: /login' );
 	</div>
 </header>
 
+
+
 <section class="dashboard section">
-  <!-- Container Start -->
-  <div class="container">
-    <!-- Row Start -->
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="sidebar">
-          <!-- User Widget -->
-          <div class="widget user-dashboard-profile">
-            <!-- User Image -->
-            <div class="profile-thumb">
-              <img src="<?=ROUTE?>/assets/image/user_profile.png" alt="" class="rounded-circle">
-            </div>
-            <!-- User Name -->
-            <h5 class="text-center"><?php echo user('fname').' '.user('lname');?></h5>
-            <p> <?php echo date("Y/m/d") ?></p>
-            <a  class="btn btn-main-sm" >Sunshine Enterprise USA</a>
-          </div>
-          
-          <!-- delete-account modal -->
-          <!-- delete account popup modal start-->
-<!-- Modal -->
-<div class="modal fade" id="deleteaccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header border-bottom-0">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body text-center">
-        <img src="<?=ROUTE?>/assets/images/account/Account1.png" class="img-fluid mb-2" alt="">
-        <h6 class="py-2">Are you sure you want to delete your account?</h6>
-        <p>Do you really want to delete these records? This process cannot be undone.</p>
-        <textarea class="form-control" name="message" id="" cols="40" rows="4" class="w-100 rounded"></textarea>
-      </div>
-      <div class="modal-footer border-top-0 mb-3 mx-5 justify-content-center">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-danger">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
-        </div>
-      </div>
-      <div class="col-lg-8">
-        <!-- Dashboard Links -->
-        <?php 
-        $id = user('id');
 
-        $query = "Select role FROM users where id = $id";
-        $permission = query_row($query);
-        if($permission['role'] == 'admin'){
-        ?>
-        <div class="widget user-dashboard-menu">
-          <ul>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/users"><i class="fa fa-user-circle"></i> Users</a></li>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li ><a href="<?=ROUTE?>/admin/jobs"><i class="fa fa-bullhorn"></i> My Jobs</a></li>
-              </div>
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/employeers"><i class="fa fa-users"></i> Employeers</a></li>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/industries"><i class="fa fa-sitemap"></i>Industries</a></li>
-              </div>
-              
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/requests"><i class="fa fa-bolt"></i>Talent Requests</a></li>
-              </div>
 
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/visits"><i class="fa fa-male" aria-hidden="true"></i>Visits</a></li>
-              </div>
-
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/aplications"><i class="fa fa-bolt"></i>Aplications</a></li>
-              </div>
-
-              <div class="col-lg-4 col-md-4 col-sm-12">
-              <li><a href="<?=ROUTE?>/admin/notifications"><i class="fa fa-phone"></i>Notifications</a></li>
-              </div>
-            </div>
-            <!-- <li><a href="#!" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-wrench"></i>Delete Account</a></li> -->
-          </ul>
-        </div>
-        <?php } ?>
-
-        <div class="widget user-dashboard-menu">
         <?php
-
+            //here is starts the crud
             require_once $filename;
           
         ?>
-        </div>
-      </div>
-    </div>
-    <!-- Row End -->
-  </div>
-  <!-- Container End -->
+
+
 </section>
+<section class="dashboard section">
+
+</section>
+
 
 <!--============================
 =            Footer            =
@@ -220,10 +163,9 @@ header('Location: /login' );
         <div class="block">
           <h4>Our Services</h4>
           <ul>
-            <li><a href="<?=ROUTE?>/admin/users">Users</a></li>
-            <li><a href="<?=ROUTE?>/admin/Industries">Industries</a></li>
-            <li><a href="<?=ROUTE?>/admin/jobs">Jobs</a></li>
-
+            <li><a href="<?=ROUTE?>/user/users">Users</a></li>
+            <li><a href="<?=ROUTE?>/user/Industries">Industries</a></li>
+            <li><a href="<?=ROUTE?>/user/jobs">Jobs</a></li>
           </ul>
         </div>
       </div>
@@ -231,14 +173,12 @@ header('Location: /login' );
         <div class="block">
           <h4>User Areas</h4>
           <ul>
-            <li><a href="<?=ROUTE?>/admin/aplications">Aplications</a></li>
-            <li><a href="<?=ROUTE?>/admin/profile">Profile</a></li>
+            <li><a href="<?=ROUTE?>/user/aplications">Aplications</a></li>
+            <li><a href="<?=ROUTE?>/user/profile">Profile</a></li>
           </ul>
         </div>
       </div>
-    <?php  endif;?>
-      <div class="col-lg-4 col-md-7">
-      </div>
+      <?php  endif;?>
     </div>
   </div>
   <!-- Container End -->
@@ -247,23 +187,22 @@ header('Location: /login' );
 <footer class="footer-bottom">
   <!-- Container Start -->
   <div class="container">
-    <div class="row">
-      <div class="col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
-        <!-- Copyright -->
-        <div class="copyright">
-        <p>Copyright &copy; <?php echo date("Y")?> Designed & Developed by <a class="text-white" href="#">Sunshine</a></p>
-        </div>
+      <div class="row">
+          <div class="col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
+            <!-- Copyright -->
+            <div class="copyright">
+            <p>Copyright &copy; <?php echo date("Y")?> Designed & Developed by <a class="text-white" href="#">Sunshine</a></p>
+            </div>
+          </div>
+          <div class="col-lg-6">
+              <ul class="social-media-icons text-center text-lg-right">
+                <li><a class="fa fa-linkedin" href=""></a></li>
+                <li><a class="fa fa-facebook" href=""></a></li>
+                <li><a class="fa fa-twitter" href=""></a></li>
+                <li><a class="fa fa-instagram" href=""></a></li>
+              </ul>
+          </div>
       </div>
-      <div class="col-lg-6">
-        <!-- Social Icons -->
-        <ul class="social-media-icons text-center text-lg-right">
-          <li><a class="fa fa-linkedin" href=""></a></li>
-          <li><a class="fa fa-facebook" href=""></a></li>
-          <li><a class="fa fa-twitter" href=""></a></li>
-          <li><a class="fa fa-instagram" href=""></a></li>
-        </ul>
-      </div>
-    </div>
   </div>
   <!-- Container End -->
   <!-- To Top -->

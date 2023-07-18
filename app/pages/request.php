@@ -98,7 +98,7 @@ if(!empty($_POST)){
       </div>';
       
       redirect('home');
-
+      //SELECT * FROM `candidates` INNER JOIN industries on candidates.industry_id LIKE industries.IndustryId;
       }
     }
 

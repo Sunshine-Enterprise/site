@@ -54,7 +54,8 @@
 
                 <div class="col">
                     <div class="sform-floating">
-                        <textarea id='summernote' class="form-control" name="content" /></textarea>
+                        <textarea id='summernote' class="summernote" cols="30" rows="10" name="content"></textarea>
+                        
                     </div>
                 </div>  
               </div>    
@@ -548,7 +549,54 @@
  </div>   
       </div>   
     </div>   
-  </div>   
+  </div>  
+<?php elseif($action == 'watch'):?>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        
+        <?php
+      $id = $url[3] ?? null;
+      
+      $query = "select jobs.*,industries.Nameindustry from jobs join industries on jobs.industry_id = industries.IndustryId where jobs.id = :id limit 1";
+      $row = query_row($query, ['id'=>$id]);
+      ?>
+
+
+<article class="single-post">
+                    <div class="row">
+                        <div class="col">
+                        <h2><?=$row['job_name']?></h2>
+                        </div>
+                        <div class="col">
+                            <h2 class="text-right">$ <?=$row['salary']?> <i class="fa fa-money" aria-hidden="true"></i></h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                            <div class="col">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><?=$row['date']?></li>
+                                </ul>
+                            </div>
+                            <div class="col">
+                                <ul class="list-inline">
+                                    <li class="text-right"><?=$row['time']?></li>
+                                </ul>
+                            </div>
+                    </div>
+					<?=$row['state'].' - '?><?=$row['city']?></p>
+                    <h4>Job Description:</h4></br>
+					<?=$row['content']?>
+
+				</article>
+              <a type="submit" class="btn btn-light font-weight-bold border w-25" href="<?=ROUTE?>/admin/jobs">Go back</a>
+              <a href="<?=ROUTE.'/admin/jobs/edit/'?><?=$id?>" data-toggle="tooltip" class="btn btn-primary font-weight-bold border w-25 float-right" data-placement="top" title="Edit" class="edit">Edit</a></button>
+
+      </div>   
+    </div>   
+  </div>  
+
 <?php else:?>
 
 
@@ -586,6 +634,7 @@ $rows = query($query);
 								<th scope="col">Positions</th>
 								<th scope="col">Industry</th>
 								<th scope="col">Autor</th>
+								<th scope="col">View</th>
 								<th scope="col">Duplicate</th>
 								<th scope="col">Edit</th>
 								<th scope="col">Delete</th>
@@ -595,19 +644,26 @@ $rows = query($query);
 						<tbody>
             <?php $i=1; if(!empty($rows)):?>
             <?php foreach($rows as $row):?>
+              
 							<tr class="">
+              
 								<td scope="row"><?=$i++?></td>
-								<td scope="row"><strong><?=$row['job_name']?></strong></td>
-								<td scope="row">
+
+								<td scope="row"><strong><a href="<?=ROUTE.'/admin/jobs/watch/'?><?=$row['id']?>"><?=$row['job_name']?></a></strong></td>
+								
+                <td scope="row">
                   <?php if($row['status'] == '1'){
-                    echo'<p class="bg-success text-light border rounded p-2 text-center">Active<p>';
+                    
+                    echo'<p class="bg-success text-light border rounded p-2 text-center">
+                    Active
+                    <p>';
                     
                   }elseif($row['status'] == '0'){
                     echo'<p class="bg-danger text-light border rounded p-2 text-center ">Innactive<p>';                      
                   }
                 ?>
                 </td>
-								<td scope="row"><?=$row['time']?></td>
+								<td scope="row"><a href="<?=ROUTE.'/admin/jobs/watch/'?><?=$row['id']?>"><?=$row['time']?></a></td>
 								<td scope="row"><?=$row['state']?></td>
 								<td scope="row"><?=$row['city']?></td>
 								<td scope="row"><?=$row['zipcode']?></td>
@@ -616,9 +672,13 @@ $rows = query($query);
 								<td scope="row"><?=$row['positions']?></td>
                 <td scope="row"><?=$row['Nameindustry'] ?></td>
                 <td scope="row"><?=$row['email'] ?></td>
-                </td>
 							
 								
+                <td class='text-center'> 
+                  <a href="<?=ROUTE.'/admin/jobs/watch/'?><?=$row['id']?>" data-toggle="tooltip" data-placement="top" title="Watch" class="watch">
+                      <i class="fa fa-eye bg-warning text-dark p-2 rounded rounded-circle"></i> 
+                  </a>
+                </td>
                 <td class='text-center'> 
                   <a href="<?=ROUTE.'/admin/jobs/duplicate/'?><?=$row['id']?>" data-toggle="tooltip" data-placement="top" title="Duplicate" class="duplicate">
                       <i class="fa fa-files-o bg-info text-light p-2 rounded rounded-circle"></i> 
@@ -640,6 +700,7 @@ $rows = query($query);
 						</tbody>
 					</table>
           </div>
+          <br>
         <a href="<?=ROUTE.'/admin/jobs/add'?>" class="mt-2">
             <button  type="submit" class="btn btn-warning btn-sm">
               Post new job
@@ -675,8 +736,34 @@ $rows = query($query);
 					</nav>
                 </div>
                 
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!-- Summernote JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote.min.js" integrity="sha512-6rE6Bx6fCBpRXG/FWpQmvguMWDLWMQjPycXMr35Zx/HRD9nwySZswkkLksgyQcvrpYMx0FELLJVBvWFtubZhDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    $(document).ready(function() {
+       //summernote
+       $('.summernote').summernote();
+    });
+  </script>
+    <?php endif;?>
 
-                    <?php endif;?>
+<style>
+
+    ul {
+    list-style-type: disc;
+    margin-bottom: 15px;
+    padding-left:20px;
+    }
+    
+    ol {
+        list-style-type: decimal;
+        padding-left:20px;
+        margin-bottom: 15px;
+      }
+      
+</style>
 
 				<!-- pagination -->
 

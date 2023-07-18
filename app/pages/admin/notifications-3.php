@@ -32,12 +32,12 @@ if(!empty($_POST)){
           foreach ($_POST['phone'] as $key => $val) {
 
             for ($i=0; $i < $key; $i++) { 
+
               $phones[$key] = $val;
               echo "<pre>";
               $data['phone'] = $val;
               //echo $phones[$key];
               echo "</pre>";
-
 
               //echo $data['phone'];
            

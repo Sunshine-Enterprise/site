@@ -3,6 +3,44 @@ ob_start();
 include '../app/pages/includes/header_general.php';ob_end_flush();
 ?>
 
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+
+
+//Load Composer's autoloader
+require '../vendor/autoload.php';
+
+function send_email($name, $email, $job){
+  $mail = new PHPMailer(true);
+
+ // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+  $mail->isSMTP();                                            //Send using SMTP
+  $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+  $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+  $mail->Username   = 'jose2002sebas@gmail.com';                     //SMTP username
+  $mail->Password   = 'jtxrfnkainowjfzd';                               //SMTP password
+  $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+  $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+  //Recipients
+  $mail->setFrom('jose2002sebas@gmail.com', $name);
+  $mail->addAddress($email);     //Add a recipient
+ 
+  //Content
+  $mail->isHTML(true);                                  //Set email format to HTML
+  $mail->Subject = 'Application Confirmation ';
+  $mail->Body    = "<h2>Sunshine Enterprise USA</h2>
+                    <h3>Dear user thanks for your application to: </h3><strong>".$job."</strong></br>
+                    <p>We'll contact you as soon as possible</p>
+                    ";
+                    
+  $mail->AltBody = 'Year 2023';
+
+  $mail->send();
+  //echo 'Message has been sent';
+
+}
+?>
 
 <section class="section-sm pb-0">
 	<div class="container">
@@ -111,6 +149,8 @@ include '../app/pages/includes/header_general.php';ob_end_flush();
             <?php
           
             if(!empty($_POST)){
+                //echo $query;
+
                 $errors = [];
                 if(empty($_POST['name'])){
                     $errors['name'] = 'Please provide your Full Name';
@@ -132,7 +172,7 @@ include '../app/pages/includes/header_general.php';ob_end_flush();
                     //here save the information about the requests on the folder
                     //define which folder for requests
                     define ('SITE_ROOT', realpath(dirname(__FILE__)));
-                    define("SMARTY_DIR", SITE_ROOT."/aplications/");
+                    define("SMARTY_DIR", SITE_ROOT."/resumes/");
                     
                     $targetFile = SMARTY_DIR.basename($_FILES['pdfFile']['name']);
                     $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
@@ -165,6 +205,16 @@ include '../app/pages/includes/header_general.php';ob_end_flush();
                         values(:id_job, :name, :email, :phone, :filename, :folder, :date)";
                         sleep(0.5);
                         query($query, $data);
+                        $query1 = "SELECT job_name FROM jobs WHERE slug = '$slug'";
+                        $num = query($query1);
+
+                        foreach ($num as $key => $value) {
+                           foreach ($value as $i) {
+                            send_email($_POST['name'], $_POST['email'], $i);
+
+                           }
+                        }
+
                         }
                     }
                 }
@@ -172,7 +222,7 @@ include '../app/pages/includes/header_general.php';ob_end_flush();
               }
             ?>
 
-            <div class="col-lg-9 col-md-8">
+            <div id="form" class="col-lg-9 col-md-8">
                 <div class="block comment">
                         <h4>Apply Here</h4>
                         <?php
@@ -181,7 +231,7 @@ include '../app/pages/includes/header_general.php';ob_end_flush();
                         unset($_SESSION['aplication']);
                     }
                     ?>
-                    <form method="post">
+                    <form method="post" action="#form" enctype="multipart/form-data">
                         <!-- Message -->
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
@@ -211,12 +261,10 @@ include '../app/pages/includes/header_general.php';ob_end_flush();
                             <div class="col-sm-12 col-md-6">
                                 <!-- Name -->
                                 <div class="form-group mb-30">
-                                    <label for="name">Curriculum:</label>
-                                    <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="pdfFile" id="pdfFile" >
-                                <span class="d-block"> 
-                                <label class="custom-file-label" for="customFileLangHTML" data-browse="<?php if (isset($fileType)){ echo $fileType;} else{ echo 'Select pdf file';}?>"></label>
-                                </div>
+                                    <label for="name">Resume (PDF Only):</label>
+                                    <div class="mb-3">
+                                      <input class="form-control form-control-sm" name="pdfFile" id="pdfFile" type="file">
+                                    </div>
                                 </div>
                             </div>
                             
@@ -256,6 +304,10 @@ include '../app/pages/includes/header_general.php';ob_end_flush();
     box-shadow: 0 0 10px #ffc107 !important;
 }
 </style>
+<script>
+window.onunload = function(){ window.scrollTo(0,0); }
+
+</script>
 
 
 

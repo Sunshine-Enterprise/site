@@ -253,9 +253,6 @@
               </div>
             </div>
 
-            
-
-
               <button type="submit" class="btn btn-warning font-weight-bold mt-3 border" data-toggle="modal" data-target="#CreateAccount">Save</button>
               <a type="submit" class="btn btn-light font-weight-bold mt-3" href="<?=ROUTE?>/admin/users">Go back</a>
 

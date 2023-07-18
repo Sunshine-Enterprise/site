@@ -170,7 +170,6 @@
 
 		<!-- Container Start -->
 		<div class="container">
-			<div class="row">
 				<div class="col-12">
 					<!-- Section title -->
 					<div class="section-title">
@@ -207,6 +206,45 @@
 			</div>
 		</div>
 	</section>
+
+
+
+<div class="container-fluid">
+ 	<div class="row px-4">
+		<div class="col-12">
+		<div class="section-title">
+					<h3 class="text-dark font-weight-light h1">Talent Solutions New</h3>
+					<p class="pt-3 font-italic h4"></p>
+		</div>						
+		</div>
+		<?php 
+		//$query = "SELECT * FROM jobs";
+		$query = "select * from jobs where salary > 11 order by id desc limit 4";
+		$i=1;
+		$rows = query($query);
+		?>
+		<div class="col-12">
+		<div class="trending-ads-slide">
+					<?php foreach($rows as $row) : ?>
+					<div class="col-sm-12 col-md-3 col-lg-3">
+						<!-- product card -->
+							<div class="category-block ">
+								<div class="header-card">
+									<h4><?=$row['job_name']?> <span class="float-right"> </span></h4>
+									<h4 class="h6"><i class="fa fa-money icon-bg-1"></i><?=' $'.$row['salary']. '/hr'?><span class="float-right"><?=$row['time']?></h4>
+								</div>
+								<ul class="category-list h2">
+									<li class="fw-bold"> Location:<span class="float-right"><?=$row['city'].' / '.$row['state']?></span></li>
+								</ul>
+								<a href="job/<?=$row['slug']?>" class="btn bg-warning text-dark w-100 h-6">Apply now</a>
+							</div>
+					</div>
+					<?php endforeach;  ?>
+
+				</div>						
+		</div>
+	</div>
+</div>
 
 
 <!--====================================

@@ -1,3 +1,6 @@
+<div class="container">
+  <div class="row">
+      <div class="col-12">
 
 <div class="row row-cols-1 row-cols-md-1 g-6">
 
@@ -11,31 +14,18 @@
       </div>
     </div>
   </div>
-  <div class="col mt-3">
-    <div class="card h-100">
-      <div class="card-body">
-            <h2 class="card-title ">Upload your CV here:  <i class="fa fa-folder float-right" aria-hidden="true"></i></h2>
-            <div class="input-group mb-3">
-
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" id="inputGroupFile02">
-                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-              </div>
-              <div class="input-group-append">
-              </div>
-            </div>
-
-        <p class="card-text">
-        </p>
-      </div>
-    </div>
-  </div>
 </div>
 <br>
 
 <?php
-    $query = "select * from industries where disabled = 1 order by IndustryId";
+    $industry = "SELECT COUNT(IndustryId) FROM industries";
+    $limit = query($industry);
+    
+
+    $user = user('id');
+    $query = "SELECT * FROM `candidates` INNER JOIN industries on candidates.industry_id = industries.IndustryId WHERE candidates.user_id = '$user' && candidates.job_id = 0";
     $row = query($query);
+    //SELECT * FROM `candidates` INNER JOIN industries on candidates.industry_id LIKE industries.IndustryId;
 ?>
 <!--------------------------------------------------------------------------->
 <div class="row row-cols-1 row-cols-md-2 g-6">
@@ -44,7 +34,7 @@
 <div class="col mb-3">
     <div class="card h-100">
         <div class="card-body bg-white">
-        <a href="<?=ROUTE?>">
+        <a href="<?=ROUTE?>/user/jobs/<?=$rows['industry_id']?>">
         <h2 class="card-title">Explore Jobs on: <?= $rows['Nameindustry']?></h2>
         </a>
     </div>
@@ -54,3 +44,7 @@
 
 
 <br>
+
+</div>
+</div>
+</div>

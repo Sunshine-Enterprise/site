@@ -85,6 +85,14 @@ function query_row(string $query, array $data = []){
 
 	return false;
     }
+    function login_user()
+    {
+        if(!empty($_SESSION['candidate']))
+		return true;
+
+	return false;
+    }
+    
     function redirect($page){
         header('Location: '.ROUTE.'/'.$page);
         die;
@@ -132,6 +140,13 @@ function query_row(string $query, array $data = []){
     {
         if(!empty($_SESSION['USER'][$key])){
             return $_SESSION['USER'][$key];
+        }
+        return '';
+    }
+    function industry($key = '')
+    {
+        if(!empty($_SESSION['industry'][$key])){
+            return $_SESSION['industry'][$key];
         }
         return '';
     }

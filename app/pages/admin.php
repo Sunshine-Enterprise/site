@@ -57,8 +57,6 @@ if($section =='download'){
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="Agency HTML Template">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="author" content="Themefisher">
-  <meta name="generator" content="Themefisher Classified Marketplace Template v1.0">
 
 	<!-- favicon -->
 	<link href="<?=ROUTE?>/assets/image/favicons/android-chrome-144x144.png" rel="shortcut icon">

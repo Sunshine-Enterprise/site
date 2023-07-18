@@ -62,7 +62,7 @@ if(isset($_POST['resend'])){
             $update_token = "UPDATE users set token = '$token' WHERE email = '$get_email' LIMIT 1";
             query($update_token);
             $_SESSION['recover'] = 'Your recover password has been send to your email'; 
-            recover_password($get_email, $update_token);
+            recover_password($get_email, $token);
 
         }else{
             $_SESSION['recover_bad'] ="The email doesn't exist";
@@ -104,6 +104,8 @@ if(isset($_POST['resend'])){
 
       <section class="login py-5 border-top-1">
           <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-lg-7 col-md-10 align-item-center">
               <?php 
            if(isset($_SESSION['recover'])){
             ?>
@@ -133,8 +135,6 @@ if(isset($_POST['resend'])){
 
           }
         ?>
-          <div class="row justify-content-center">
-            <div class="col-lg-7 col-md-10 align-item-center">
               <div class="border rounded rounded-3">
               <h3 class="p-4 text-center rounded rounded-3 bg-light text-dark">Recover your password: <i class="fa fa-sun-o text-warning" aria-hidden="true"></i></h3>
                 <form method="post">

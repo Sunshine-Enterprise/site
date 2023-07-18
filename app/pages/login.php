@@ -60,6 +60,12 @@ include '../app/pages/includes/header_general.php';
             unset($_SESSION['verify']);
           }
         ?>
+        <?php 
+           if(isset($_SESSION['newpass'])){
+            echo $_SESSION['newpass'];  
+            unset($_SESSION['newpass']);
+          }
+        ?>
           <h3 class="p-4 text-center rounded rounded-3 bg-light text-dark">SUNSHINE ENTERPRISE USA <i class="fa fa-sun-o text-warning" aria-hidden="true"></i></h3>
           <!---------------------------->
           <!-------ALERT SECTION-------->

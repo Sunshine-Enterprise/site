@@ -38,8 +38,8 @@
     ?>
 <div class="container">
 <div class="row">
-<div class="col-6">
-<section class="advt-post bg-light py-5">
+<div class="col-md-6 col-lg-5 col-sm-12">
+<section class="advt-post bg-light py-5 rounded">
   <div class="container">
     <form method="POST" enctype="multipart/form-data">
       <?php
@@ -126,7 +126,7 @@
 
 
 
-  <div class="col-6 bg-gray">
+  <div class="col-md-6 col-lg-7 col-sm-12">
     <?php
       $query = "SELECT u.email, n.date_user, n.phone, n.message FROM notifications as n inner join users as u on n.user_id = u.id limit 7";
       $rows = query($query);
@@ -138,12 +138,10 @@
             <h3>History of messages</h3>
           </div>
           <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
   <thead>
-
     <tr>
-      <th scope="col">
-      </th>
+
       <th scope="col">Autor:</th>
       <th scope="col">Message:</th>
       <th scope="col">Phone:</th>
@@ -154,11 +152,10 @@
   <?php if(!empty($rows)):?>
   <?php foreach($rows as $row):?>
     <tr class="">
-      <th scope="col">
-      </th>
+
       <td scope="col"><?=$row['email']?></td>
-      <td scope="col" class="" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width:10px; "><?=$row['message']?></td>
-      <td scope="col"><?=$row['phone']?></td>
+      <td scope="col" class=""><?=$row['message']?></td>
+      <td scope="col" style="width: 150px;"><?=$row['phone']?></td>
     </tr>
   <?php endforeach;  ?>
   <?php  endif; ?>  

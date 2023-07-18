@@ -27,23 +27,26 @@ $employeer = query_row($query);
 
 $id = user('id');
 
-$query = "Select role FROM users where id = $id";
+$query = "Select role, data FROM users where id = $id";
 $permission = query_row($query);
 
 
-if($permission['role'] == 'user'){
-    include '../app/pages/includes/user-view.php';
 
+if($permission['role'] == 'user' & $permission['data'] == 1){
+    include '../app/pages/includes/user-view.php';
+}elseif($permission['role'] == 'user' & $permission['data'] == 0){
+    include '../app/pages/includes/survey.php'; 
+}
+    /*
 }elseif($permission['role'] == 'employeer'){
     include '../app/pages/includes/employeers-view.php';
-}
+}*/
 elseif($permission['role'] == 'admin'){
     include '../app/pages/includes/admin-view.php';
-}
+}/*
 elseif($permission['role'] == 'developer'){
     include '../app/pages/includes/admin-view.php';   
-}
-
+}*/
 ?>
 
 
