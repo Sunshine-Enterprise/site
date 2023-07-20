@@ -31,6 +31,7 @@ if(isset($_POST) & !empty($_POST)){
 	$num = count($_POST['application']);
 	//echo($num);
 	
+	
 	if($num > 1){
 		for ($i=0; $i< $num; $i++) {
 			echo $aplications = $app[$i];
@@ -39,7 +40,7 @@ if(isset($_POST) & !empty($_POST)){
 				  query($query, $data);
 
 				  $_SESSION['candidate'] = 'Thanks';
-		
+				 // $point + $num;
 		
 		//unset($_SESSION['candidate']);
 		}
@@ -49,13 +50,12 @@ if(isset($_POST) & !empty($_POST)){
 
 		$app = ($_POST['application'][0]);
 		$data['app'] = $app;
-
 		$query = "INSERT INTO `candidates` (`user_id`, `date`, `industry_id`, `job_id`, `file_path`,  `resume`) 
                   VALUES (:user, :date, :industry,  :app, '',  '')";
 				  query($query, $data);
 
 				  $_SESSION['candidate'] = 'Thanks';
-
+				
 	}
 
 	//$query = "INSERT INTO candidates ";
@@ -99,17 +99,60 @@ if(isset($_POST) & !empty($_POST)){
 					<th scope="col">Date Open</th>            
 				</tr>
 			</thead>
-			<form method="POST"> 
-			<tbody>
-				<?php if(!empty($rows)):?>
-					<?php foreach($rows as $row):?>
-						<tr class="">
-							<th scope="row">
-								<div class="form-check">
-								<input <?php if($row['id'] == $match){echo 'disabled';}?> name="application[]" class="form-check-input" type="checkbox" value="<?=$row['id']?>"/>
-								</div>
-							</th>
+			    <?php
+					$proff = "SELECT job_id, user_id FROM candidates WHERE job_id != 0 && user_id = $user";
+					$result = query($proff);
+					echo "<pre>";
+					print_r($result); // Important RESULT
+					echo "</pre>";
+					if($result){
+						$total = count($result);
+						for ($i=0; $i < $total; $i++) { 
+							print_r($result[$i]['job_id']); 
+							$_SESSION['candidate_app'] = 'disabled = true'; 
+							$count=0;
+							echo $total;
+						}
+					}else{
+						$total = null;
+					}
 
+					?>
+			<form method="POST"> 
+				<tbody>
+					
+					<?php if(!empty($rows)):?>
+						<?php $point = 0;  ?>
+						<?php foreach($rows as $row): ?>
+							<tr class="">
+								<?php if(  $row['id'] /*\==  != $result[$point]['job_id'] */ ){ ?>
+									<th scope="row">		
+										<div class="form-check">
+											<input  
+											<?php /* for ($i=0; $i < $total; $i++) : */?>
+												<?php /*  if(  $row['id']  != $result[$total]['job_id']  ): */?>
+												<?php /*  endif; */?>
+											<?php /* endfor; */ ?>
+										name="application[]" class="form-check-input" type="checkbox" value="<?=$row['id']?>"/>
+										<?php // if(isset($result[$point]['job_id'])){ 
+											echo $point;
+
+													if($result[$point]['job_id'] == $row['id']){
+
+												//	echo $result[$point]['job_id'];
+												}
+											//	} 
+										  ?>
+									</div>
+								</th>
+
+						<?php  }else{ ?>
+							<th scope="row">
+									<div class="form-check">
+										<input name="application[]" disabled class="form-check-input" type="checkbox" value="<?=$row['id']?>"/>
+									</div>
+							</th>
+						<?php } ?>
 							<td><?=$row['job_name']?></td>
 							<td><?=$row['time']?></td>
 							<td><?='$'.$row['salary']?></td>
@@ -118,7 +161,7 @@ if(isset($_POST) & !empty($_POST)){
 							<td><?=$row['date']?></td>
 							
 						</tr>
-						
+						<?php $point ++;?>
 						<?php endforeach;  ?>
 						<?php  endif; ?>
 					</tbody>
