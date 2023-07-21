@@ -662,12 +662,12 @@
 								<div class="col-lg-6 col-md-12 col-sm-12">
 								  <h3 class="tab-title">For Stakeholders</h3>
 								  <p class="text-justify">We create alliances with minority-owned partners
-to help customers meet M/WBE and SBE spend
-goals. Our valued partners include certified MBE,
-WBE, DBE, SBE (8A), HUB Zone business,
-American & Alaskan native and service-disabled
-veteran owned companies.
-</p>
+									to help customers meet M/WBE and SBE spend
+									goals. Our valued partners include certified MBE,
+									WBE, DBE, SBE (8A), HUB Zone business,
+									American & Alaskan native and service-disabled
+									veteran owned companies.
+									</p>
 							    </div>
 								<div class="col-lg-6 col-md-12 col-sm-12">
 										<!------------>

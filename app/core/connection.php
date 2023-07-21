@@ -3,7 +3,7 @@
         
         define('DBUSER', 'root');
         define('DBPASS', '');
-        define('DBNAME', 'seu-usa');
+        define('DBNAME', 'seu_usa');
         define('DBHOST', 'localhost');
     }else{
 
