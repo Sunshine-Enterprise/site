@@ -1,318 +1,547 @@
-<?php
-ob_start();
-include '../app/pages/includes/header_general.php';ob_end_flush();
-?>
 
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
+$slug = $url[1] ?? null;   
+if($slug)
+{
+   $query = "select jobs.*,industries.Nameindustry from jobs join industries on jobs.industry_id = industries.IndustryId where jobs.slug = :slug limit 1";
+$row = query_row($query, ['slug'=>$slug]);
+}  
 
 
-//Load Composer's autoloader
-require '../vendor/autoload.php';
 
-function send_email($name, $email, $job){
-  $mail = new PHPMailer(true);
+if(!empty($_POST)){
+  $errors = [];
+  if(empty($_POST['name'])){
+      $errors['name'] = 'Please provide your Full Name';
+  }
+  if(empty($_POST['email'])){
+      $errors['email'] = 'Please provide your Email';
+  }
+  if(empty($_POST['phone'])){
+      $errors['phone'] = 'Please provide your Phone';
+  }
+  if(empty($errors)){
+    $data = [];
+    $data['id_job']= '';
+    $data['name']= $_POST['name'];
+    $data['email']= $_POST['email'];
+    $data['phone']= $_POST['phone'];
+    $data['date'] = date('Y-m-d');
 
- // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-  $mail->isSMTP();                                            //Send using SMTP
-  $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-  $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-  $mail->Username   = 'jose2002sebas@gmail.com';                     //SMTP username
-  $mail->Password   = 'jtxrfnkainowjfzd';                               //SMTP password
-  $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
-  $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    define ('SITE_ROOT', realpath(dirname(__FILE__)));
+    define("SMARTY_DIR", SITE_ROOT."/resumes/");
+    
+    $targetFile = SMARTY_DIR.basename($_FILES['pdfFile']['name']);
+    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
-  //Recipients
-  $mail->setFrom('jose2002sebas@gmail.com', $name);
-  $mail->addAddress($email);     //Add a recipient
- 
-  //Content
-  $mail->isHTML(true);                                  //Set email format to HTML
-  $mail->Subject = 'Application Confirmation ';
-  $mail->Body    = "<h2>Sunshine Enterprise USA</h2>
-                    <h3>Dear user thanks for your application to: </h3><strong>".$job."</strong></br>
-                    <p>We'll contact you as soon as possible</p>
-                    ";
-                    
-  $mail->AltBody = 'Year 2023';
+    
+    //PDF size
+    if($fileType != 'pdf' || $_FILES["pdfFile"]["size"] > 900000){
+        echo 'is too much size 2MB';
+    }else{
+                        
+      if (move_uploaded_file($_FILES["pdfFile"]["tmp_name"], $targetFile)) {
 
-  $mail->send();
-  //echo 'Message has been sent';
+          $filename = $_FILES["pdfFile"]["name"];
+          $folder = $targetFile;
 
+          
+          $data['filename'] = $filename;
+          $data['folder'] = $folder;
+              
+          $_SESSION['aplication'] 
+          ='<div class="alert alert-success alert-dismissible fade show text-center mt-3" role="alert">
+           <strong>Thanks: </strong> '.$_POST['name'].' for submit your applicattion.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+        </div>';
+
+        $query = "insert into `aplications` (`id_job`, `name`, `email`, `phone`, `file_name`, `file_path`, `date`) 
+                  values(:id_job, :name, :email, :phone, :filename, :folder, :date)";
+        
+                  query($query, $data);
+                  $query1 = "SELECT job_name FROM jobs WHERE slug = '$slug'";
+                  $num = query($query1);
+
+                 /* foreach ($num as $key => $value) {
+                     foreach ($value as $i) {
+                      send_email($_POST['name'], $_POST['email'], $i);
+
+                     }
+                  } */
+                }
+  }     }
 }
+
 ?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sunshine Project Management</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 
-<section class="section-sm pb-0">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="search-result bg-gray">
-					<h2>Positions From Sunshine Enterprise USA</h2>
-					<p><?php date('Y-m-d')?> </p>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-3 col-md-4">
-				<div class="category-sidebar">
-					<div class="widget category-list">
-	    <h4 class="widget-header">All Categories</h4>
-	    <?php
-				//$query = "SELECT * FROM jobs";
-				$query = "select * from industries order by IndustryId desc";
-				$rows = query($query);
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+   </head>
 
-				if($rows){
-					foreach($rows as $row){
-						?>
-						<ul class="category-list">
-							<li><a href="<?=ROUTE?>/industry/<?=$row['slug']?>"<?=$row['Nameindustry']?>><?=$row['Nameindustry']?><span><i class="fa fa-briefcase" aria-hidden="true"></i>
- </span></a></li>
-						</ul>
-						<?php
-					}
-				}else{
-				?>
-				<div class="alert alert-danger" role="alert">We can't find more industries</div>
-				<?php
-				}
-			?>
+  <body>
+<!--
+  <div class="modal">
+        <div class="bodyModal">
+            <section class="section">
+                <div class="row justify-content-center">
+                    
+                <div class=" col-10 col-md-6 col-lg-4 ">
+                <h3 class="h1 text-center mt-0 shadow-5 text-light">Job Application</h3>
+
+                  <form class="needs-validation" novalidate="" onsubmit="event.preventDefault(); sendDataProduct();">
+
+                    <div class="row g-3">
+                      <div class="col-sm-12 mb-1">
+                        <label id="form-contact" for="firstName" class="form-label fw-bold">Full Name</label>
+                        <input id="form-input" type="text" class="form-control" id="firstName" placeholder="" value="" required="" name="name">
+                        <div id="form-contact" class="form-text text-danger fw-bold"> Full Name is Required</div>
+                      </div>
+                      
+                      <div class="col-sm-6 mb-1">
+                        <label id="form-contact" for="firstName" class="form-label fw-bold">Phone Number</label>
+                        <input id="form-input" type="text" class="form-control" id="firstName" placeholder="" value="" required="" name="phone">
+                        <div id="form-contact" class="form-text text-danger fw-bold"> First Name is Required</div>
+                      </div>
+          
+                      <div class="col-sm-6 mb-1">
+                        <label id="form-contact" for="lastName" class="form-label fw-bold">Email</label>
+                        <input id="form-input" type="text" class="form-control" id="lastName" placeholder="" value="" required="" name="email">
+                        <div id="form-contact" class="form-text text-danger fw-bold"> First Name is Required</div>
+                      </div>
+          
+          
+          
+                    
+                    <div class="col-sm-12 pt-3">
+                      <label id="form-contact" for="lastName" class="form-label fw-bold">Resume</label>
+                      <input id="form-input" type="file" class="form-control" id="lastName" placeholder="" value="" required="" name="resume">
+                      <div id="form-contact" class="form-text text-danger fw-bold"> First Name is Required</div>
+                    </div>
+                    
+                    <br>
+                    <br>
+                    <hr class="my-3">
+          
+                    <br>
+                     
+                    <button id="button-input" class="w-100 btn btn-primary btn-lg rounded border-0 mt-4" type="submit">Submit Application</button>
+                   
+                    <a href="#" onclick="coloseModal();"> 
+                    <button  class="w-100 btn btn-primary btn-lg rounded border-0 mt-4 bg-danger" type="submit">Exit</button>
+                   </a> 
+
+                </form>
+                </div>
+              </div>
+
+
+            </section>
+        </div>
+    </div>
+ --->
+
+    <!---NAVBAR-->
+    <nav class="top-nav" id="home">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-auto">
+            <!--<p class="top">
+                  <i class="fa fa-envelope text-dark"></i>
+                  <span>executive@spmconstructions.com</span>
+                </p>-->
+                <p class="top">
+                  <i class="fa fa-volume-control-phone text-dark"></i>
+                  <span class="fw-bold">(407)-768-1231</span>
+                </p>
+            </div>
+            <div class="col-auto">
+                <div class="social">
+                 <a href="https://www.facebook.com/SunshineProjectManagement"> <i class="fa fa-facebook text-dark"></i></a>
+                 <a href="https://www.instagram.com/sunshineprojectmanagement"> <i class="fa fa-instagram text-dark"></i></a>
+                 <a href="https://www.linkedin.com/company/sunshine-project-management"> <i class="fa fa-linkedin text-dark"></i></a>
+                </div>
+            </div>
+
+          </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="<?=ROUTE?>"><span></span><img src="assets/img/spmlogo_new.png" alt="" width="50px" height="100px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Services
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="services">Concrete</a></li>
+                <li><a class="dropdown-item" href="services">Masonry</a></li>
+                <li><a class="dropdown-item" href="services">Demolition</a></li>
+                <li><a class="dropdown-item" href="services">OutDoor Design</a></li>
+                <li><a class="dropdown-item" href="services">Landscaping</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="about" id="menu">About</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="team" id="menu">Team</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="projects" id="menu">Projects</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="carrers" id="menu">Carrers</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="btn btn-brand" aria-current="page" href="request" id="menu">Contact Us</a>
+            </li>
+            
+          </ul>
+          
+        </div>
+      </div>
+    </nav>
+
+    <!---/NAVBAR-->
+
+
+  
+    
+<!---SECTION-->
+
+<div class="container-fluid pt-4" >
+    <h2 class=" text-center text-dark shadow-2 pt-3 h1" id="about">Sunshine Project Management Team<h2>
+      <h4 class="fst-italic text-center"> Sunshine Project Management Pathway</h4>
+      <p class="text-center display-5 h6" id="subtitle-about">Founding in 2022</p>
 </div>
 
-				</div>
-			</div>
 
-<!--------------------------------------------------------------------->
-			<div class="col-lg-9 col-md-8">
-			<?php
-                $slug = $url[1] ?? null;   
-                if($slug)
-                {
-                   $query = "select jobs.*,industries.Nameindustry from jobs join industries on jobs.industry_id = industries.IndustryId where jobs.slug = :slug limit 1";
-			       $row = query_row($query, ['slug'=>$slug]);
-                }     
+    <section class="pt-0" id="section-team">
+      <div class="container text-center">
+        <div class="container marketing">
 
-				if(!empty($row)){
-                    ?>
-                <article class="single-post">
-                    <div class="row">
-                        <div class="col">
-                        <h2><?=$row['job_name']?></h2>
-                        </div>
-                        <div class="col">
-                            <h2 class="text-right">$ <?=$row['salary']?> <i class="fa fa-money" aria-hidden="true"></i></h2>
-                        </div>
-                    </div>
+            <!-- Three columns of text below the carousel -->
+            <br>
+            <div class="row featurette">
+              <div class="col-lg-12 col-md-12">
+                
+              </div>
+            </div>
+            <br>
 
-                    <div class="row">
-                            <div class="col">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item"><?=$row['date']?></li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <ul class="list-inline">
-                                    <li class="text-right"><?=$row['time']?></li>
-                                </ul>
-                            </div>
-                    </div>
-					<?=$row['state'].' - '?><?=$row['city']?></p>
-                    <h4>Job Description:</h4>
-					<p><?=$row['content']?></p>
+            <div class="row g-5">
+                
 
-                    <div class="row">
+                <div class="col-md-8">
 
-                        <div class="col-6">
-                        <?php
-                                showSharer("https://seu-usa.com/job/pipe-layer", "Apply here!");
-                        ?>
-                        </div>
-                        <div class="col-6">
-                                <ul class="list-inline">
-                                    <li class="text-right"><h4>Positions Avaible: <?=$row['positions']?></h4> </li>
-                                </ul>
-                        </div>
-                    </div>
-
-				</article>
-                <?php   
-				}else{
-				?>
-				<div class="alert alert-danger" role="alert">We can't find more jobs</div>
-				<?php
-				}
-			?>
-			</div>
-            
-            <div class="col-lg-3 col-md-4"></div>
-            <!------------------------------------------------------------------------------------>
-            <?php
-          
-            if(!empty($_POST)){
-                //echo $query;
-
-                $errors = [];
-                if(empty($_POST['name'])){
-                    $errors['name'] = 'Please provide your Full Name';
-                }
-                if(empty($_POST['email'])){
-                    $errors['email'] = 'Please provide your Email';
-                }
-                if(empty($_POST['phone'])){
-                    $errors['phone'] = 'Please provide your Phone';
-                }
-                if(empty($errors)){
-                    $data = [];
-                    $data['id_job']= $row['id'];
-                    $data['name']= $_POST['name'];
-                    $data['email']= $_POST['email'];
-                    $data['phone']= $_POST['phone'];
-                    $data['date'] = date('Y-m-d');
-
-                    //here save the information about the requests on the folder
-                    //define which folder for requests
-                    define ('SITE_ROOT', realpath(dirname(__FILE__)));
-                    define("SMARTY_DIR", SITE_ROOT."/resumes/");
-                    
-                    $targetFile = SMARTY_DIR.basename($_FILES['pdfFile']['name']);
-                    $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-                    
-                    //PDF size
-                    if($fileType != 'pdf' || $_FILES["pdfFile"]["size"] > 900000){
-                        echo 'is too much size 2MB';
-                    }
-                    else{
-                        
-                    if (move_uploaded_file($_FILES["pdfFile"]["tmp_name"], $targetFile)) {
-
-                        $filename = $_FILES["pdfFile"]["name"];
-                        $folder = $targetFile;
-
-                        
-                        $data['filename'] = $filename;
-                        $data['folder'] = $folder;
-                            
-                        $_SESSION['aplication'] 
-                        ='<div class="alert alert-success alert-dismissible fade show text-center mt-3" role="alert">
-                         <strong>Thanks: </strong> '.$_POST['name'].' for submit your applicattion.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>';
-    
-                        $query = "insert into `aplications` (`id_job`, `name`, `email`, `phone`, `file_name`, `file_path`, `date`) 
-                        values(:id_job, :name, :email, :phone, :filename, :folder, :date)";
-                        sleep(0.5);
-                        query($query, $data);
-                        $query1 = "SELECT job_name FROM jobs WHERE slug = '$slug'";
-                        $num = query($query1);
-
-                        foreach ($num as $key => $value) {
-                           foreach ($value as $i) {
-                            send_email($_POST['name'], $_POST['email'], $i);
-
-                           }
-                        }
-
-                        }
-                    }
-                }
-            
-              }
-            ?>
-
-            <div id="form" class="col-lg-9 col-md-8">
-                <div class="block comment">
-                        <h4>Apply Here</h4>
-                        <?php
-                     if(isset($_SESSION['aplication'])){
-                        echo $_SESSION['aplication'];
-                        unset($_SESSION['aplication']);
-                    }
-                    ?>
-                    <form method="post" action="#form" enctype="multipart/form-data">
-                        <!-- Message -->
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6">
-                                <!-- Name -->
-                                <div class="form-group mb-30">
-                                    <label for="name">Full Name:</label>
-                                    <input name="name"  type="text" class="form-control" id="name" required="">
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                                <!-- Email -->
-                                <div class="form-group mb-30">
-                                    <label for="email">Email:</label>
-                                    <input name="email"  type="email" class="form-control" id="email" required="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6">
-                                <!-- Email -->
-                                <div class="form-group mb-30">
-                                    <label for="email">Phone Number:</label>
-                                    <input name="phone"  type="number" class="form-control" id="email" required="">
-                                </div>
-                            </div>
-                        
-                            <div class="col-sm-12 col-md-6">
-                                <!-- Name -->
-                                <div class="form-group mb-30">
-                                    <label for="name">Resume (PDF Only):</label>
-                                    <div class="mb-3">
-                                      <input class="form-control form-control-sm" name="pdfFile" id="pdfFile" type="file">
-                                    </div>
-                                </div>
+                  <div class="row mb-2">
+                    <!--------------->
+                    <div class="col-md-12">
+                      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static" style="text-align: left;">
+                            <div>
+                                <strong class="d-inline-block mb-2 text-primary-emphasis" id="date-blog">Concrete </strong>
+                                <div class="mb-1 text-body-secondary" id="tag-blog">08/22/2023</div>
                             </div>
                             
-                        </div>
-                        <br>
-                       
-                        <div class="row">
-                            <div class="col text-center">
-                                <button type="submit" class="btn btn-transparent w-100">Submit</button>
+                            <div class="row py-4">
+                            <div class="col-6 col-md-8"><h3 class="mb-0 pb-2 float-left" id="title-blog">We're Hiring Concrete Foreman</h3></div>
+                            <div class="col-6 col-md-4">
+                            <a class="icon-link icon-link-hover text-dark rounded fw-bold p-2 apply_job" 
+                            job="ConcreteForeman" style="float: right;" id="apply-button" style="--bs-link-hover-color-rgb: 25, 135, 84;" href="#">
+                                Apply here
+                            </a>
                             </div>
+                            </div>
+                          
+                          
+                          <p class="card-text mb-1" id="date-content">
+                          Sunshine Staffing is currently seeking a Concrete Foreman we have an exciting opportunity for a Foreman focused in construction with successful and progressive experience in field planning and production of all types of work related to construction as directed by the Superintendent.
+                          </p>
+                          <h3 class="my-3 h4" >Responsibilities:</h3>
 
-                            <div class="col text-center">
-                            <a class="btn btn-light font-weight-bold mt-2 w-100" href="<?=ROUTE?>/explore">Back</a>
-                            </div>
+                          <ul>
+                            <li>Organize and plan the work with the Superintendent</li>
+                            <li>Direct oversight responsibility of timesheets for labor and equipment, as well as daily reports complete with quantities worked</li>
+                            <li>Review, maintain, and monitor the crew’s productivity and goals daily</li>
+                            <li>Enforce quality control and Company safety policies on all aspects of the work</li>
+                            <li>Follow the project construction process to ensure that work is completed on time</li>
+                            <li>Set Line and Grade from points established by others.</li>
+                            <li>Place, consolidate, and protect case-in-place concrete or masonry structures.</li>
+                            <li>Smooth and finish freshly poured cement or concrete, using floats, trowels, screeds, or powered cement finishing tools.</li>
+                            <li>Spray materials through hoses to clean, coat, or seal surfaces.</li>
+                            <li>Lubricate, clean, and repair machinery, equipment, and tools.</li>
+                            <li>Demolish structures and salvage useful materials.</li>
+                            <li>Be familiar with procedures of Building Layout.</li>
+                          </ul>
+
+
+                          <h3 class="my-3 h4" >Qualifications:</h3>
+
+                          <ul>
+                            <li>Minimum of 5-10 years of experience as a concrete working foreman.</li>
+                            <li>Ability to read, understand, and complete job-related documents and forms via blueprints and use of tablet drawings and specifications</li>
+                            <li>Know the abbreviated and common construction terms for the equipment and materials used</li>
+                            <li>Ability to calculate mathematical figures such as proportions, percentages, area, circumference, and volume</li>
+                            <li>Have own transportation and a valid driving license</li>
+                            <li>Know the abbreviated and common construction terms for the equipment and materials used </li>
+                            <li>Have own transportation and a valid driving license </li>
+                          </ul>
+
+                          <h3 class="my-3 h4" >Necessary Attributes::</h3>
+
+                          <ul>
+                            <li>Must possess the ability to adapt to different personalities and management styles.</li>
+                            <li>Team player with excellent interpersonal skills</li>
+                            <li>Self-starter with strong verbal communication skills</li>
+                            <li>Dedicated and hard working</li>
+                            <li>Strong leadership qualities</li>
+                            <li>Excellent attention to detail with emphasis placed on quality</li>
+                            <li>Professionally and technically competent in bridge and crane work </li>
+                          </ul>
+                          
                         </div>
+                      </div>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" >
+
+                    <div class="row g-3">
+                    <div class="col-sm-12 mb-1">
+                        <label id="form-contact" for="firstName" class="form-label fw-bold">Full Name</label>
+                        <input id="form-input" type="text" class="form-control" id="firstName" placeholder="" value="" required="" name="name">
+                    </div>
+                    
+                    <div class="col-sm-6 mb-1">
+                        <label id="form-contact" for="firstName" class="form-label fw-bold">Phone Number</label>
+                        <input id="form-input" type="text" class="form-control" id="firstName" placeholder="" value="" required="" name="phone">
+                    </div>
+
+                    <div class="col-sm-6 mb-1">
+                        <label id="form-contact" for="lastName" class="form-label fw-bold">Email</label>
+                        <input id="form-input" type="text" class="form-control" id="lastName" placeholder="" value="" required="" name="email">
+                    </div>
+
+
+
+
+                    <div class="col-sm-12 pt-3">
+                    <label id="form-contact" for="lastName" class="form-label fw-bold">Resume</label>
+                    <input id="form-input" type="file" class="form-control" id="lastName" placeholder="" value="" required="" name="pdfFile">
+                    </div>
+
+                    <br>
+                    <br>
+                    <hr class="my-3">
+
+                    <br>
+                    
+                    <button id="button-input" type="submit" class="w-100 btn btn-primary btn-lg rounded border-0 mt-4" >Submit Application</button>
+
+                    <a href="#" onclick="coloseModal();"> 
+                    <button  class="w-100 btn btn-primary btn-lg rounded border-0 mt-4 bg-danger" type="submit">Exit</button>
+                    </a> 
+                    </div>
+
                     </form>
+                    <!--------------->
                 </div>
-			</div>
-            <!------------------------------------------------------------------------------------>
-		</div>
-	</div>
-</section>
+            </div>
 
-<style>
-.custom-file-label{
-    height: 50px !important;
-    box-shadow: 0 0 10px #ffc107 none;
-}
-.custom-file-input~.custom-file-label[data-browse]::after {
-    content: attr(data-browse);
-    height: 48px !important;
-    padding: 1rem;
-}
+            <div class="col-md-4">
+                <div class="position-sticky" style="top: 2rem;">
 
-.custom-file-input {
-    border:1px solid #ffc107;
-    box-shadow: 0 0 10px #ffc107 !important;
-}
-</style>
-<script>
-window.onunload = function(){ window.scrollTo(0,0); }
+                  <div>
+                    <h4 class="fst-italic border-bottom pb-3">SEU offert Jobs</h4>
+                    <ul class="list-unstyled">
+                      <li>
+                        <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none" href="#">
+                            <div class="col-lg-8 w-100">
+                                
+                                <h6 class="mb-0 fw-semibold">Concrete Field </h6>
+                            </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none" href="#">
+                          <div class="col-lg-8 w-100">
+                            <h6 class="mb-0 fw-semibold">Mansory </h6>
+                        </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none" href="#">
+                          <div class="col-lg-8 w-100">
+                            <h6 class="mb-0 fw-semibold">Demolition </h6>
+                        </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>                
+              </div>
 
-</script>
+            <hr class="featurette">        
+            <!-- /END THE FEATURETTES -->
+          </div>
+      </div>
+  </section>
+    <!---/SECTION-->
+
+
+<!---FOOTER-->
+<div class="container-fluid bg-light">
+  <div class="container">
+    <footer class="pt-5">
+      <div class="row">
+        
+              <div class="col-6 col-md-2 mb-3">
+                  <h5 class="text-dark fw-bold fst-italic">Services</h5>
+                  <ul class="nav flex-column">
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Concrete</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Masonry</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Pavers</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Demolition</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Design</a></li>
+                  </ul>
+              </div>
+              
+              <div class="col-6 col-md-2 mb-3">
+                  <h5 class="text-dark fw-bold fst-italic">Careers</h5>
+                  <ul class="nav flex-column">
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Concrete</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                  </ul>
+              </div>
+              
+              <div class="col-md-6 offset-md-1 mb-3">
+                  <form>
+                      <h5>Get in touch</h5>
+                      <p>Insert your email to contact you:</p>
+                      <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                          <label for="newsletter1" class="visually-hidden">Email address</label>
+                          <input id="form-input" id="newsletter1" type="text" class="form-control" placeholder="Email address">
+                          <button class="btn" id='submit-email' type="button"> <p class="fw-semibold m-0">Submit</p> </button>
+                      </div>
+                  </form>
+                
+                <div class="row text-center pt-4">
+                  <div class="col">
+                    <p class="top">
+                      <i class="fa fa-home text-secondary"></i>
+                      <span class="fw-bold text-secondary">500 Winderley Place, Suite 218, Maitland FL 32751</span>
+                    </p>
+                  </div>
+                </div>
+                
+                <div class="row text-center">
+                  <div class="col-sm">
+                    <p class="top">
+                      <i class="fa fa-envelope-o text-secondary"></i>
+                      <span class="fw-bold text-secondary">jobs@spmconstructions.com</span>
+                    </p>
+                  </div>
+                  <div class="col-sm pr-3">
+                    <p class="top">
+                      <i class="fa fa-phone text-secondary"></i>
+                      <span class="fw-bold text-secondary">+1 (407) 951-1386</span>
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
+            <p>© Sunshine Project Management.</p>
+            <ul class="list-unstyled d-flex">
+              <a href="https://www.facebook.com/SunshineProjectManagement"> <i class="fa fa-facebook text-dark m-3"></i></a>
+              <a href="https://www.instagram.com/sunshineprojectmanagement"> <i class="fa fa-instagram text-dark m-3"></i></a>
+              <a href="https://www.linkedin.com/company/sunshine-project-management"> <i class="fa fa-linkedin text-dark m-3"></i></a>
+            </ul>
+            
+          </div>
+        </footer>
+      </div>
+    </div>
+  <!---/FOOTER-->
+
+
+  
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="/public_html/assets/js/app.js"></script>  
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>   
+    <script>
+        
+    $('.apply_job').click(function(event){
+
+    event.preventDefault();
+
+    var job = $(this).attr('job');
+    alert(job);
+
+    });
+
+    function coloseModal(){
+        $('.modal').fadeOut();
+    }
+
+    </script>
+
+    <style>
+        
+  .modal{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.81);
+    display: block;
+  }
+
+    </style>
 
 
 
-<?php
+<!-- 
+      <script src="assets/js/bootstrap.min.js"></script>     
+      <script src="assets/js/jquery.js"></script>     
+      <script src="assets/js/owl.carousel.min.js"></script>     
+            
+      <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+-->
 
-include '../app/pages/includes/footer.php';
+  </body>
+</html>
 
-?>

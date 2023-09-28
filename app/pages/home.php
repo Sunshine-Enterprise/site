@@ -1,769 +1,600 @@
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-
-  <!-- ** Basic Page Needs ** -->
-  <meta charset="utf-8">
-  <title><?=APP_NAME?></title>
-
-  <!-- ** Mobile Specific Metas ** -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Agency HTML Template">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="author" content="Themefisher">
-  <meta name="generator" content="Themefisher Classified Marketplace Template v1.0">
-
-	<!-- favicon -->
-	<link href="<?=ROUTE?>/assets/image/favicons/android-chrome-144x144.png" rel="icon">
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D56MEQ917T"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-    
-      gtag('config', 'G-D56MEQ917T');
-    </script>
-
-	<!-- 
-	Essential stylesheets
-	=====================================-->
-	<link href="<?=ROUTE?>/assets/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/bootstrap/bootstrap-slider.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/slick/slick.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/slick/slick-theme.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/css/styles_sunshine.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/css/style.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-</head>
-
-<body class="body-wrapper">
-
-
-<header>
-    <?php
-          
-          if(isset($_SESSION['request'])){
-            echo $_SESSION['request'];
-            unset($_SESSION['request']);
-    }
-          
-        ?>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<nav class="navbar navbar-expand-lg navbar-light navigation">
-					<a class="navbar-brand" href="home">
-						<img src="<?=ROUTE?>/assets/image/logos/logo1.png" alt="">
-					</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav ml-auto main-nav ">
-
-							<li class="nav-item dropdown">
-								<a class="nav-link" href="about">About</a>
-							</li>
-
-							<li class="nav-item">
-							<a class="nav-link" href="team">Team</a>
-							</li>
-
-							<li class="nav-item dropdown dropdown-slide @@pages">
-							<a class="nav-link" href="blog">Blog</a>
-							</li>
-							
-							<li class="nav-item dropdown dropdown-slide @@dashboard"></li>
-							
-							<!------------------------------------------------------------------>
-							<li class="nav-item  @@pages">
-								<a class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Jobs <span><i class="fa fa-angle-down"></i></span>
-								</a>
-								<!-- Dropdown list -->
-								<div class="dropdown-menu w-100 mt-0" aria-labelledby="navbarDropdown" style="border: 0px !important;">
-								<div class="container">
-								<div class="row my-4  w-100">
-									<div class="col-md-6 col-lg-6 mb-3 mb-lg-6">
-									<div class="list-group list-group-flush">
-									<?php
-									$query = "select * from industries where disabled = 1 order by IndustryId desc limit 4";
-									$rows = query($query);
-									?>
-										
-									<?php
-									if($rows){
-										foreach($rows as $row):
-											?>
-										<ul class="category-list  bg-warning ml-4 rounded rounded-4">
-											<a href="industry/<?=$row['slug']?>" class="dropdown-item"><?=$row['Nameindustry']?></a>
-										</ul>
-													
-									</div>
-								</div>
-									<div class="col-md-6 col-lg-6 mb-6 mb-lg-6">
-									<div class="list-group list-group-flush">
-									<?php
-										endforeach;
-									}else{
-									?>
-												<ul class="category-list">
-												<a href="industry/<?=$row['slug']?>" class="dropdown-item fw-bold"><?=$row['Nameindustry']?></a>
-												</ul>										<?php
-										} 
-										?>
-									</div>
-									</div>
-								</div>
-								</div>
-							</div>
-							</li>
-							<!------------------------------------------------------------------>
-
-						</ul>
-						<ul class="navbar-nav ml-auto mt-10">
-							<li class="nav-item">
-								<a class="nav-link login-button border-secondary text-secondary rounded" href="<?=ROUTE?>/login">Login</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link text-white add-button bg-warning" href="<?=ROUTE?>/signup"><i class="fa fa-plus-circle"></i> Register Here</a>
-							</li>
-						</ul>
-					</div>
-				</nav>
-			</div>
-		</div>
-	</div>
-</header>
-
-    <!--====================================
-    =            New Section             =
-    =====================================-->
-<div class="bg-image" style="background-image: url('<?=ROUTE?>/assets/image/jumbotron2.png');  background-position: center; background-repeat:no-repeat; background-size: cover; max-width: 100% !important; max-height: 100% !important;">
-		<div class="col-md-6">
-			<div class="row g-0 overflow-hidden flex-md-row mb-4 h-md-250 position-relative">
-				<div class="col p-4 d-flex flex-column position-static ">
-					<strong class="d-inline-block mb-2 text-primary-emphasis h1  px-4 text-warning py-3  rounded rounded-3 font-weight-light font-weight-bold" style="">Join us & Explore our Jobs</strong>
-					<p class="card-text mb-auto justify-content-center px-4 h4 text-light text-light py-3 font-italic">Whether you are seeking top talent, to begin a career at your dream company, we can help you.</p>
-					
-					<br>
-					<div class="row landing-fullwidth__buttons pl-3">
-					<a href="request" class="btn bg-warning mx-2 text-light font-weight-bold">Find Talent</a>
-					<a href="explore" class="btn bg-warning text-light font-weight-bold">Find a Job</a>
-			</div>
-				</div>
-			</div>
-		</div>
-	</div>
-    <!--====================================
-    =            New Section             =
-    =====================================-->
-
-
-<section class=" section pt-2 pb-3">
-
-		<!-- Container Start -->
-		<div class="container">
-				<div class="col-12">
-					<!-- Section title -->
-					<div class="section-title">
-						<h2>Search</h2>
-						<p class='fw-bold'>Enter keywords or Strings</p>
-					
-
-					<div class="advance-search mb-3">
-						<div class="container">
-							<div class="row justify-content-center">
-								<div class="col-lg-12 col-md-12 align-content-center">									
-									<form role="search" action='<?=ROUTE?>/search'>
-											<div class="form-row align-items-center">
-												<div class="form-group col-xl-8 col-lg-8 col-md-8">
-												<input type="search" name='find' value="<?php $_GET['find'] ?? ''?>" class="form-control my-2 my-lg-0" id="inputtext4" placeholder="What do you need?">
-											</div>
-											<div class="form-group col-xl-4 col-lg-4 col-md-4"> 
-													<button type="submit" class="btn btn-wa active w-100 bg-warning">Search Now</button>
-											</div>
-											</div>
-											<?php
-											if(empty($_GET['find'])){
-
-											}		
-											?>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</section>
-
-
-
-<div class="container-fluid">
- 	<div class="row px-4">
-		<div class="col-12">
-		<div class="section-title">
-					<h3 class="text-dark font-weight-light h1">Talent Solutions New</h3>
-					<p class="pt-3 font-italic h4"></p>
-		</div>						
-		</div>
-		<?php 
-		//$query = "SELECT * FROM jobs";
-		$query = "select * from jobs where salary > 11 order by id desc limit 4";
-		$i=1;
-		$rows = query($query);
-		?>
-		<div class="col-12">
-		<div class="trending-ads-slide">
-					<?php foreach($rows as $row) : ?>
-					<div class="col-sm-12 col-md-3 col-lg-3">
-						<!-- product card -->
-							<div class="category-block ">
-								<div class="header-card">
-									<h4><?=$row['job_name']?> <span class="float-right"> </span></h4>
-									<h4 class="h6"><i class="fa fa-money icon-bg-1"></i><?=' $'.$row['salary']. '/hr'?><span class="float-right"><?=$row['time']?></h4>
-								</div>
-								<ul class="category-list h2">
-									<li class="fw-bold"> Location:<span class="float-right"><?=$row['city'].' / '.$row['state']?></span></li>
-								</ul>
-								<a href="job/<?=$row['slug']?>" class="btn bg-warning text-dark w-100 h-6">Apply now</a>
-							</div>
-					</div>
-					<?php endforeach;  ?>
-
-				</div>						
-		</div>
-	</div>
-</div>
-
-
-<!--====================================
-	=    New Section Popular Jobs     =
-=====================================-->
-	<section class="popular-deals section bg-gray pt-1">
-	<div class="container">
-		<div class="row" >
-			<div class="col-md-12">
-				<div class="section-title justify-content-center mb-1">
-					<h3 class="text-dark font-weight-light h1 pt-4">Latest jobs</h3>
-					<p class="pt-3 font-italic h4 text-center mb-4">Apply here!!</p>
-					
-				</div>
-			</div>
-		</div>
-	<?php 
-		//$query = "SELECT * FROM jobs";
-		$query = "select * from jobs where salary > 15 order by id desc limit 4";
-		$i=1;
-		$rows = query($query);
-	?>
-
-	<div class="container">
-		<div class="row">
-			<!-- offer 01 -->
-			<div class="col-lg-12">
-				<div class="trending-ads-slide">
-					<?php foreach($rows as $row) : ?>
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-							<div class="category-block ">
-								<div class="header-card">
-									<h4><?=$row['job_name']?> <span class="float-right"> </span></h4>
-									<h4 class="h6"><i class="fa fa-money icon-bg-1"></i><?=' $'.$row['salary']. '/hr'?><span class="float-right"><?=$row['time']?></h4>
-								</div>
-								<ul class="category-list h2">
-									<li class="fw-bold"> Location:<span class="float-right"><?=$row['city'].' / '.$row['state']?></span></li>
-								</ul>
-								<a href="job/<?=$row['slug']?>" class="btn bg-warning text-dark w-100 h-6">Apply now</a>
-							</div>
-					</div>
-					<?php endforeach;  ?>
-
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-
-
-<!--===========================================
-=            Popular deals section            =
-============================================-->
-	
-	
-
-
-<section class="popular-deals section bg-light">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="section-title">
-					<h3 class="text-dark font-weight-light h1">Talent Solutions</h3>
-					<p class="pt-3 font-italic h4"></p>
-					
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<!-- offer 01 -->
-			<div class="col-lg-12">
-				<div class="trending-ads-slide">
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-						<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			<!-- <div class="price">$200</div> -->
-			<a href="">
-				<img class="card-img-top img-fluid" src="<?=ROUTE?>/assets/image/meeting.jpg" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="">Public Sector</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-bullhorn"></i>Recluiting</a>
-		    	</li>
-		    	<li class="list-inline-item">
-		    		<a href="#"><i class="fa fa-users"></i>In state</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text"></p>
-		   
-		</div>
-	</div>
-</div>
-
-
-
-					</div>
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			<!-- <div class="price">$200</div> -->
-			<a href="">
-				<img class="card-img-top img-fluid" src="<?=ROUTE?>/assets/image/partners.png" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="">Human Resourses</a></h4>
-			<ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href="single"><i class="fa fa-bullhorn"></i>Recluiting</a>
-		    	</li>
-		    	<li class="list-inline-item">
-		    		<a href="#"><i class="fa fa-users"></i>In State</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text"></p>
-		   
-		</div>
-	</div>
-</div>
-
-
-
-					</div>
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			<!-- <div class="price">$200</div> -->
-			<a href="">
-				<img class="card-img-top img-fluid" src="<?=ROUTE?>/assets/image/contract.png" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="">Private Sector</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-bullhorn"></i>Recluiting</a>
-		    	</li>
-		    	<li class="list-inline-item">
-		    		<a href="#"><i class="fa fa-users"></i>In State</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text"></p>
-		  
-		</div>
-	</div>
-</div>
-
-
-
-					</div>
-					<div class="col-sm-12 col-lg-4">
-						<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			<!-- <div class="price">$200</div> -->
-			<a href="">
-				<img class="card-img-top img-fluid" src="<?=ROUTE?>/assets/image/office.jpg" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="">Contracts</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-bullhorn"></i>Recluiting</a>
-		    	</li>
-		    	<li class="list-inline-item">
-		    		<a href="#"><i class="fa fa-users"></i>In State</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text"></p>
-		   
-		</div>
-	</div>
-</div>
-
-
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-
-<!-- Container Start -->
-<section class="section p-0">
-	<div class="container">
-		<div class="row">
-			<div class="col-12">
-				<!-- Section title -->
-				<div class="section-title">
-					<h2>Our specialties</h2>
-				</div>
-			</div>
-			<?php 
-				  $query = "SELECT * FROM industries";
-			 	  $row = query($query);
-				  foreach ($row as $key):
-			?>
-			<!--------------->
-			<div class="col-sm-12 col-md-6 col-lg-4 mb-2 mt-0">
-				<div class="card border-0">
-					<div class="thumb-content">
-						<!-- <div class="price">$200</div> -->
-						<a href="<?=ROUTE?>/industry/<?=$key['slug']?>">
-						<div class="category-block border-0 mb-0 shadow-none py-0">
-							<div class="header">
-							<img class="card-img-top img-fluid rounded" src="<?=ROUTE?>/assets/image/<?=$key['IndustryId']?>.png" alt="Card image cap">
-							</div>
-						</div>
-						</a>
-					</div>
-					<div class="card-body pt-0">
-						<h4 class="card-title text-center mb-0"><a href=""><?=$key['Nameindustry']?></a></h4>
-						<ul class="list-inline product-meta text-center">
-							<?php $query1 = "SELECT COUNT(id) FROM jobs WHERE industry_id = ".$key['IndustryId']."";
-								  $consult = query($query1);
-								 
-								?>
-							
-							<li class="list-inline-item">
-								<a class="" href="<?=ROUTE?>/industry/<?=$key['slug']?>">Jobs Avaible: <?php  print_r($consult[0]['COUNT(id)']);?></a>
-							</li>
-						</ul>
-						<p class="card-text"></p>
-					
-					</div>
-				</div>
-		    </div>
-			<!--------------->
-			<?php endforeach; ?>
-
-		</div>
-	</div>
-</section>
-<!-- Container End -->
-
-
-
-
-<section class="section">
-	<!-- Container Start -->
-	<div class="container">
-		<div class="row">
-			<!-- Left sidebar -->
-					<div class="col-md-12">
-						<div class="section-title justify-content-center mb-1">
-								<h3 class="text-dark h1 pt-4">Talent Solutions </h3>
-						</div>
-					</div>
-					</div>
-					
-					
-					<div class="col-lg-12">
-						<div col="12">
-							<ul class="nav nav-pills justify-content-center px-3 py-2" id="pills-tab" role="tablist">
-								<li class="nav-item py-2 px-1">
-									<a class="nav-link active bg-warning " id="pills-home-tab" data-toggle="pill" href="#pills-private" role="tab" aria-controls="pills-home"
-									 aria-selected="true">For Private Sector</a>
-								</li>
-								<li class="nav-item py-2 px-1">
-									<a class="nav-link bg-warning" id="pills-profile-tab" data-toggle="pill" href="#pills-public" role="tab" aria-controls="pills-profile"
-									 aria-selected="false"> For Public Sector</a>
-								</li>
-								<li class="nav-item py-2 px-1">
-									<a class="nav-link bg-warning" id="pills-contact-tab" data-toggle="pill" href="#pills-executive" role="tab" aria-controls="pills-contact"
-									 aria-selected="false">Executive Search</a>
-								</li>
-								<li class="nav-item py-2 px-1">
-									<a class="nav-link bg-warning" id="pills-stake-tab" data-toggle="pill" href="#pills-stake" role="tab" aria-controls="pills-stake"
-									 aria-selected="false">For Stakeholders</a>
-								</li>
-								<li class="nav-item py-2 px-1">
-									<a class="nav-link bg-warning" id="pills-contract-tab" data-toggle="pill" href="#pills-contract" role="tab" aria-controls="pills-contract"
-									 aria-selected="false">Contract Staffing</a>
-								</li>
-								<li class="nav-item py-2 px-1">
-									<a class="nav-link bg-warning" id="pills-temporal-tab" data-toggle="pill" href="#pills-temporal" role="tab" aria-controls="pills-temporal"
-									 aria-selected="false">Temporal Staff</a>
-								</li>
-							</ul>
-						</div>
-						<div class="product-details">	
-							
-					<div class="content mt-0 pt-0">
-					
-						<div class="tab-content" id="pills-tabContent">
-							<div class="tab-pane fade show active" id="pills-private" role="tabpanel" aria-labelledby="pills-home-tab">
-								<div class="row">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-									<h3 class="tab-title">Private Sector</h3>
-									<p class="text-justify">We offer a variety of staffing and recruitment
-										solutions for corporations, small businesses and
-										private sector organizations. Working with the
-										right staffing and recruiting partner can reduce
-										your overhead, operational costs and improve
-										productivity. </p>
-								</div>
-								 <div class="col-lg-6 col-md-12 col-sm-12">
-										<!------------>
-										
-										<img class="card-img-top img-fluid mt-3 rounded" src="<?=ROUTE?>/assets/image/privateSec.png" alt="Card image cap">
-										
-										<!------------>
-								</div>
-								</div>
-							</div>
-							<div class="tab-pane fade" id="pills-public" role="tabpanel" aria-labelledby="pills-profile-tab">
-								<div class="row">
-									<div class="col-lg-6 col-md-12 col-sm-12">
-										<h3 class="tab-title">Public Sector</h3>
-										<p class="text-justify">Sunshine Enterprise USA (SEU) understands the specific demands of government and public sector organizations.
-											Our experience in staffing the myriad industries comprising this sector gives us a leading edge over competitor
-									agencies. This advantage is directly passed on to our clients, allowing us to deliver the best and most qualified 
-									candidates available. </p>
-									<p class="text-justify">We offer a variety of staffing and recruitment
-										solutions for corporations, small businesses and
-										private sector organizations. Working with the
-										right staffing and recruiting partner can reduce
-										your overhead, operational costs and improve
-										productivity.</p>
-									</div>
-									<div class="col-lg-6 col-md-12 col-sm-12">
-										<!------------>
-										
-										<img class="card-img-top img-fluid mt-3" src="<?=ROUTE?>/assets/image/partners.png" alt="Card image cap">
-										
-										<!------------>
-									</div>
-								</div>
-							</div>
-							<div class="tab-pane fade" id="pills-executive" role="tabpanel" aria-labelledby="pills-contact-tab">
-								<h3 class="tab-title">Executive Roles We Have Placed:</h3>
-								<div class="row">								
-									<div class="col-lg-3 col-md-6 col-sm-12 pb-3">
-									<p class="font-weight-bold text-dark">Engineering/Public Works/Utilities:</p>
-									<?php
-									$engineers = 
-									array("City Engineer", "Department of Transportation", "(DOT) Engineer",
-									 "Assistant City Engineer", "Director of Public Services", "Public Works Director", "Public Works Assistant Director",
-									 "Water District Executive Director", "Water District General Manager", "Planning & Engineering Director", "Director of Projects",
-									 "Engineering Project Manager",	"City Planner", "Chief Plant Operator", "Assistant Utilities Director", "Director of Utilities");
-									 $count = 1;
-									?>
-										<ul>
-											<?php foreach ($engineers as $key): ?>
-													<li class="py-1"><?=$count++;?><?='. '.$key?></li>
-											<?php endforeach; ?>
-										</ul>
-									</div>
-									<div class="col-lg-3 col-md-6 col-sm-12">
-									<?php
-									$admins = 
-									array("Administrative Services Director", "Manager of Town Services", 
-									 "Management Assistant Chief", "Officer", "Human Resources/Civil Services", "Director of Human Resources",
-									 "Management", "Intergovernmental Services", "Fleet Equipment Services", "Facilities Services Manager",
-									 "Assistant Municipal Garage",	"Fixed Base Operator", "(FBO) Services", "Arts Director");
-									 $count1 = 1;
-									?>
-									<p class="font-weight-bold text-dark">Administrative Services Services:</p>
-										<ul>
-											<?php foreach ($admins as $key): ?>
-													<li class="py-1"><?=$count1++;?><?='. '.$key?></li>
-											<?php endforeach; ?>
-										</ul>
-									</div>
-									<div class="col-lg-3 col-md-6 col-sm-12">
-									<p class="font-weight-bold text-dark">Development Services:</p>
-									<?php
-									$services = 
-									array("Community Development", "Manager Development Services", 
-									 "Deputy Director of Development", "Tourism Development Director","Community Development", "Community Services",
-									  "Director of Human Resources", "Senior Building Inspector", "Chief Building Official", "New Urbanist");
-									 $count2 = 1;
-									?>
-										<ul>
-											<?php foreach ($services as $key): ?>
-													<li class="py-1"><?=$count2++;?><?='. '.$key?></li>
-											<?php endforeach; ?>
-										</ul>
-									</div>
-									<div class="col-lg-3 col-md-6 col-sm-12">
-									<p class="font-weight-bold text-dark">Information Technology:</p>
-									<?php
-									$it = 
-									array("IT Director", "Chief Technology Officer", 
-									 "Chief Information Officer", "IT Assistant Director", "IT Manager",
-									  "IT Manager (Police Department)", "IT Developer", "GIS Manager", "Senior Software Developer");
-									 $count3 = 1;
-									?>
-										<ul>
-											<?php foreach ($it as $key): ?>
-													<li class="py-1"><?=$count3++;?><?='. '.$key?></li>
-											<?php endforeach; ?>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="tab-pane fade" id="pills-stake" role="tabpanel" aria-labelledby="pills-contact-tab">
-							    <div class="row">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-								  <h3 class="tab-title">For Stakeholders</h3>
-								  <p class="text-justify">We create alliances with minority-owned partners
-									to help customers meet M/WBE and SBE spend
-									goals. Our valued partners include certified MBE,
-									WBE, DBE, SBE (8A), HUB Zone business,
-									American & Alaskan native and service-disabled
-									veteran owned companies.
-									</p>
-							    </div>
-								<div class="col-lg-6 col-md-12 col-sm-12">
-										<!------------>
-										
-										<img class="card-img-top img-fluid mt-3 rounded" src="<?=ROUTE?>/assets/image/executive.png" alt="Card image cap">
-										
-										<!------------>
-								</div>
-							    </div>
-							</div>
-							<div class="tab-pane fade" id="pills-contract" role="tabpanel" aria-labelledby="pills-contact-tab">
-							    <div class="row">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-
-								<h3 class="tab-title">Contract Staffing</h3>
-								<p class="text-justify">
-								Regardless of project size, we can tailor our
-								recruiting searches to the specific and unique
-								needs of our clients, to ensure exceptional
-								results.</p>
-								<p class="text-justify">
-									<ol>
-										<li> <strong>-</strong> Finding the best candidate for a role within your organization can be a daunting process.<br><br></li>
-										<li> <strong>-</strong> Scheduling and conducting interviews can be costly, time-consuming, and resource prohibitive. <br><br></li>
-										<li> <strong>-</strong> Ultimately, there is no guarantee that all of your hard work will produce a viable candidate. <br><br></li>
-										<li> <strong>-</strong> At Sunshine Enterprise USA (SEU), we understand and embrace these challenges.<br><br></li>
-										<li> <strong>-</strong> Allow us to source and deliver the best candidate for your project, within your outlined timeline and budget. Our customized plans deliver superior results on your schedule.<br><br></li>
-									</ol>
-									<br></p>
-									<p class="text-center"><strong class="text-dark">We have the time and talent…let us work for you!</strong></p>
-
-							    </div>
-								<div class="col-lg-6 col-md-12 col-sm-12">
-										<!------------>
-										
-										<img class="card-img-top img-fluid mt-3 rounded" src="<?=ROUTE?>/assets/image/contract.png" alt="Card image cap">
-										
-										<!------------>
-								</div>
-							    </div>
-							</div>
-							<div class="tab-pane fade" id="pills-temporal" role="tabpanel" aria-labelledby="pills-contact-tab">
-							    <div class="row">
-								<div class="col-lg-6 col-md-12 col-sm-12">
-								<h3 class="tab-title">Temporal Staff</h3>
-
-								<p class="text-justify">
-								Our exceptional staffing success rate is a direct
-								result of our refined recruiting techniques and
-								quality management process.</p>
-								<p class="text-justify">
-								Risk minimization - a complimentary service we offer at Sunshine Enterprise USA (SEU).
-								SEU will manage timesheets, payroll, insurance, and benefits for each candidate that we provide.
-								 This, in turn, will allow you to focus your attention on candidate assessment – 
-								 to determine whether he/she will be a good long-term solution for your organization.</p>
-							    </div>
-								<div class="col-lg-6 col-md-12 col-sm-12">
-										<!------------>
-										
-										<img class="card-img-top img-fluid mt-3 rounded" src="<?=ROUTE?>/assets/image/temp.png" alt="Card image cap">
-										
-										<!------------>
-								</div>
-							    </div>
-							 </div>
-								 
-								 </div>
-								
-								
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
-	<!-- Container End -->
-</section>
-
 <?php
 
-include '../app/pages/includes/footer.php';
+  if(!empty($_POST)){
+    if(isset($_POST)){
+
+      $errors = [];
+        if(empty($_POST['email'])){
+            $errors['email'] = 'Please Insert your email';
+        }else{
+
+            $data = [];
+            $data['email'] = $_POST['email'];
+            $query = "INSERT INTO emails(email) Values(:email)";
+
+            query($query, $data);
+
+            $_SESSION['request'] = '<div class="alert alert-success alert-dismissible fade show text-center mt-3" role="alert">
+            <strong>Dear user:</strong> your request has been sent successfully.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>';
+            
+          redirect('home');
+          
+          /*  
+          class Computer{
+
+            public $brand;
+            public $color;
+            public $name;
+
+            function set_brand($brand){
+              $this->brand = $brand;
+            }
+            function set_color($color){
+              $this->color = $color;
+            }
+            function set_name($name){
+              $this->name = $name;
+            }
+
+
+            function set_brand($brand){
+              return $this->brand;
+              }
+            }
+            
+            function set_color($color){
+              return $this->color;
+            }
+            function set_name(){
+              return $this->name;
+            }
+              */
+          }
+          class House{
+
+          }
+
+        }
+    }
+  
+?>
+
+<?php
+ class Computer{
+  public $mouse = 'HP';
+  protected $screen = 'LG';
+  private $keyboard = 'ASUS';
+
+  function printG(){
+    echo $this->mouse.'</br>';
+    echo $this->screen.'</br>';
+    echo $this->keyboard.'</br>';
+  }
+  
+}
+
+$device1 = new Computer;
+
+//echo ($device1->keyboard)
 
 ?>
 
-<style>
-  .form-control:focus{
-    border-color: #ffc107;
-    box-shadow: 0 0 0 0.2rem rgba(247, 228, 130, 0.84);
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sunshine Project Management</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 
-  }
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="<?=ROUTE?>/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+   </head>
+  <body>
+    <!---NAVBAR-->
+    <nav class="top-nav" id="home">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-auto">
+            <!--
+              <p class="top">
+                <i class="fa fa-envelope text-dark"></i>
+                <span>executive@spmconstructions.com</span>
+              </p>
+              -->
+                <p class="top">
+                  <i class="fa fa-volume-control-phone text-dark"></i>
+                  <a  href="tel:4077681231">
+                    <span class="fw-bold">(407)-768-1231</span>
+                  </a>
+                </p>
+            </div>
+            <div class="col-auto">
+                <div class="social">
+                 <a href="https://www.facebook.com/SunshineProjectManagement"> <i class="fa fa-facebook text-dark"></i></a>
+                 <a href="https://www.instagram.com/sunshineprojectmanagement"> <i class="fa fa-instagram text-dark"></i></a>
+                 <a href="https://www.linkedin.com/company/sunshine-project-management"> <i class="fa fa-linkedin text-dark"></i></a>
+                </div>
+            </div>
 
-  html, body{
-  height:100%
-}
-</style>
+          </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="<?=ROUTE?>"><span></span><img src="assets/img/spmlogo_new.png" alt="" width="50px" height="100px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Services
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="services">Concrete</a></li>
+                <li><a class="dropdown-item" href="services">Masonry</a></li>
+                <li><a class="dropdown-item" href="services">Demolition</a></li>
+                <li><a class="dropdown-item" href="services">OutDoor Design</a></li>
+                <li><a class="dropdown-item" href="services">Landscaping</a></li>
+              </ul>
+            </li>
 
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="about" id="menu">About</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="team" id="menu">Team</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="projects" id="menu">Projects</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="carrers" id="menu">Carrers</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="btn btn-brand" aria-current="page" href="request" id="menu">Contact Us</a>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!---/NAVBAR-->
+
+    <!---SLIDER-->
+    <div class="slider-wrapper" id="banner">
+    <!--min-vh-100-->
+    <div class="slide1 py-5 bg-cover d-flex align-items-center" id='hero-slider'>
+        <div class="container">
+        <?php
+          if(isset($_SESSION['request'])){
+              echo $_SESSION['request'];
+              unset($_SESSION['request']);
+         }
+      ?>
+          <div class="row">
+            <div class="col-12">
+              <h3 class="text-light text-uppercase h1" id="title">Sunshine Project Management</h3>
+              <h6 class="text-light displa-3 h3 fst-italic pb-3" id="title">Specialist on construction sector</h6>
+              <a href="request" class="btn btn-brand"> <p class="h2 text-dark fw-semibold"  id="subtitle">Contact Us</p></a>
+              <a href="application" class="btn btn-outline-warning border-light shadow-3"><p class="h2 fw-semibold text-light" id="contact2">Work with us</p></a>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+    <!---/SLIDER-->
+    
+<!---SECTION-->
+    <section class="mt-2" id="main-section">
+      <div class="container">
+        <div class="row align-items-center justify-content-center">
+              <div class="col-lg-5">
+                <div class="row">
+                  <div class="col-12 info-box my3">
+                    <i id="icono"class="fa fa-question-circle-o display-3" aria-hidden="true"></i>
+                    <div>                  
+                      <h5 id="subtitle">Construction</h5>
+                      <p class="text-justify" id="text"> Google LLC is an American multinational technology company focusing on artificial intelligence, online advertising, search engine technology, cloud computing, computer software, quantum computing, e-commerce, and consumer electronics</p>
+                    </div>
+                  </div>
+                  <div class="col-12 info-box my3">
+                    <i id="icono"class="fa fa-cogs display-3" aria-hidden="true"></i>
+                    <div>                  
+                      <h5 id="subtitle">Improvement</h5>
+                      <p class="text-justify" id="text"> Google LLC is an American multinational technology company focusing on artificial intelligence, online advertising, search engine technology, cloud computing, computer software, quantum computing, e-commerce, and consumer electronics</p>
+                    </div>
+                  </div>
+                  <div class="col-12 info-box my3">
+                    <i id="icono"class="fa fa-building display-3" aria-hidden="true"></i>
+                    <div>                  
+                      <h5 id="subtitle">Maintenance</h5>
+                      <p class="text-justify" id="text"> Google LLC is an American multinational technology company focusing on artificial intelligence, online advertising, search engine technology, cloud computing, computer software, quantum computing, e-commerce, and consumer electronics</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <img src="assets/img/gallery/crane.webp" class="rounded" alt="">
+              </div>
+        </div>
+      </div>
+  </section>
+    <!---/SECTION-->
+ 
+    <!---SECTION-->
+    <section class="pb-2" id="services">
+      <div class="container mb-5">
+        <div class="row g-3">
+          <div class="col-12 intro text-center">
+            <h6 class="text-center">Give us a call for an estimate today.</h6>
+            <h2 class="text-center" id="subtitle">What We Do ?</h2>
+            <p class="text-center fst-italic">Sunshine Project Management provides an effortless and efficient solution to your projects in Central FL. </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6 pb-">
+            <a href="services">
+              <div class="card_services rounded p-0">
+                <img src="assets/img/gallery/concrete.webp" class="rounded-top" alt="">
+                <div class="overlay">
+                  <h3 class="text-light fst-italic text-center" style="margin-top: 50%;"></h3>
+                </div>
+                <div class="cart-body p-3 text-center">
+                  <h5>Concrete</h5>
+                  <p class="text-justify">We specialize in all aspects of structural concrete,
+                    including foundations, slabs, poured-in-place and tilt-up wall.</p>
+                  </div>
+                </div>
+              </a>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-sm-6 pb-1">
+            <a href="services">
+            <div class="card_services rounded p-0">
+              <img src="assets/img/gallery/mansory.webp" class="rounded-top" alt="">
+              <div class="overlay">
+                <h3 class="text-light fst-italic text-center" style="margin-top: 50%;"></h3>
+              </div>
+              <div class="cart-body p-3 text-center">
+                <h5>Mansory</h5>
+                <p class="text-justify">
+                  Masonry structures, ranging from heavy structural building walls to decorative
+                  finishes in CMU or Brick applications.
+                </p>
+              </div>
+            </div>
+            </a>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-sm-6 pb-1">
+            <a href="services">
+            <div class="card_services rounded p-0">
+              <img src="assets/img/gallery/pavers.webp" class="rounded-top" alt="">
+              <div class="overlay">
+                <h3 class="text-light fst-italic text-center" style="margin-top: 50%;"></h3>
+              </div>
+              <div class="cart-body p-3 text-center">
+                <h5>Pavers</h5>
+                <p class="text-justify">SPM specializes in Brick Pavers
+                   maintenance and installation of driveways,
+                    pool decks, patios, walkways, fire pits,
+                    and retaining walls.</p>
+              </div>
+            </div>
+            </a>
+          </div>
+
+          <div class="col-lg-3 col-md-6 col-sm-6 pb-1">
+            <a href="services">
+            <div class="card_services rounded p-0">
+              <img src="assets/img/gallery/demolition.webp" class="rounded-top" alt="">
+              <div class="overlay">
+                <h3 class="text-light fst-italic text-center" style="margin-top: 50%;"></h3>
+              </div>
+              <div class="cart-body p-3 text-center">
+                <h5>Demolition</h5>
+                <p class="text-justify">Our years of experience enable us to understand. We specialize in demolition, and rubble removal services.
+                </p>
+              </div>
+            </div>
+            </a>
+          </div>
+        </div>
+        </div>
+      </div>
+  </section>
+<!---/SECTION-->
+
+    <!---SECTION-->
+    <section  id="main-section" class="py-1" id="services">
+      <div class="container mb-5">
+        <div class="row g-3">
+          <div class="col-12 intro text-center ">
+            <h2 class=" text-center text-dark shadow-2 pt-1 h1" id="about">Our Job<h2>
+              <p class="text-center display-5 h6" id="subtitle-about">Last Projects</p>
+
+              <ul class="nav nav-pills my-3 text-center " id="pills-tab" role="tablist">
+
+                <li class="nav-item px-2" role="presentation">
+                  <button class="nav-link active text-dark" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Costco Project</button>
+                </li>
+
+                <li class="nav-item px-2" role="presentation">
+                  <button class="nav-link text-dark" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Gallery</button>
+                </li>
+
+              </ul>
+              
+              <div class="tab-content" id="pills-tabContent">
+
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                    <div>
+
+                      <div class="row py-2">
+                          <div class="col-12 col-md-12">
+                            <video autoplay loop muted plays-inline class="back-video">
+                                <source src="assets/img/projects/1690633576748.mov" type="video/mp4">
+                            </video>
+                          </div>
+                      </div>
+                          
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+                  <div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-12 pb-2">
+                          <p class="lh-lg display-3 text-center fst-italic" id="p-job"> Job pouring concrete for the new build-up Costco fuel station in Clermont</p>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-lg-4">
+                          <img src="assets/img/gallery/cotsco3.webp" id="img-jobs" class="pt-3" height="280px" alt="">
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-lg-4">
+                          <img src="assets/img/gallery/cotsco2.webp" id="img-jobs" class="pt-3" height="280px" alt="">
+                        </div>
+
+                        <div class="col-12 col-sm-12 col-lg-4">
+                          <img src="assets/img/gallery/cotsco1.webp" id="img-jobs" class="pt-3" height="280px" alt="">
+                        </div>
+                    </div>
+                        
+                  </div>
+                </div>
+                <!----
+                  <div class="tab-pane fade" id="pills-disabled" role="tabpanel" aria-labelledby="pills-disabled-tab" tabindex="0">
+                    <div>
+                      
+                    <div class="row py-2">
+                        <div class="col-12 col-md-12">
+                          <p class="lh-lg display-3 text-center" id="p-job"> Google LLC is an American multinational technology company</p>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-lg-4">
+                          <img src="assets/img/horizontal/pexels-tirachard-kumtanom-450064.jpg" class="rounded-top pt-3" height="250px" alt="">
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-lg-4">
+                          <img src="assets/img/horizontal/pexels-tirachard-kumtanom-450064.jpg" class="rounded-top pt-3" height="250px" alt="">
+                        </div>
+                        
+                        <div class="col-12 col-sm-12 col-lg-4">
+                          <img src="assets/img/horizontal/pexels-tirachard-kumtanom-450064.jpg" class="rounded-top pt-3" height="250px" alt="">
+                        </div>
+                      </div>
+                  ---->
+                        
+                  </div>
+                </div>
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+<!---/SECTION-->
+
+<!---SECTION-->
+<div class="slide3 py-5 bg-cover d-flex align-items-center py-5">
+  <div class="container">
+    <div class="row">
+
+            <h4 class="text-light h1 text-center" id="text-Contact" id="form-index">Visit Us</h4>
+             <a class="text-center display-5 h6 pb-4 text-light fst-italic" id="subtitle-about" href="team">Meet our Team</a> 
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12 text-center">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">                     
+                        <h5 class="text-light h4 py-2 text-center fst-italic" id="text-Contact"> <i class="fa fa-home" aria-hidden="true"></i> Office:</h5>
+                        <h4 class="h5 text-secondary text-light fw-semibold" id="visit-p"> 500 Winderley Pl, Suite 218</h4>
+                        <h4 class="h5 text-secondary text-light fw-semibold" id="visit-p"> Maitland FL 32751</h4>
+                    </div>
+                    
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6">                     
+                        <h5 class="text-light h4 py-2 text-center fst-italic" id="text-Contact"><i class="fa fa-phone" aria-hidden="true"></i> Phone Numbers:</h5>
+                        <a  href="tel:4079511386">
+                          <h4 class="h5 text-light fw-semibold" id="visit-p"> +1 (407) 951-1386</h4>
+                        </a>
+                        
+                        <a  href="tel:4079511386">
+                          <h4 class="h5 text-light fw-semibold" id="visit-p"> +1 (407) 951-1386</h4>
+                        </a>
+
+                    </div>
+                    
+                    <div class="col-12 pt-2 col-sm-12 col-md-6 col-lg-6">
+                    <h5 class="text-light h4 text-center fst-italic" id="text-Contact"><i class="fa fa-envelope" aria-hidden="true"></i> Email:</h5>
+                    <a href="mailto:jobs@spmconstructions.com">
+                      <h4 class="h5 text-light fw-semibold pb-3" id="visit-p"> jobs@spmconstructions.com</h4>                     
+                    </a>
+                    </div>
+                </div>
+ 
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12 text-center">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.918909018602!2d-81.3975872229792!3d28.632192375665078!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88e770fd549cb1bb%3A0x9ad924b582b60007!2s500%20Winderley%20Pl%2C%20Maitland%2C%20FL%2032751!5e0!3m2!1sen!2sus!4v1692369958068!5m2!1sen!2sus" width="300" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+    </div>
+            
+
+        
+        <!--<form method="post">
+          <div class="row mb-4">
+            <div class="col">
+              <div class="form-outline">
+                <input type="text"  id="form-input" class="form-control" />
+                <label class="form-label text-light fw-bold" for="form6Example1" id="form-index">First name</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-outline">
+                <input type="text"  id="form-input" class="form-control" />
+                <label class="form-label text-light fw-bold" for="form6Example2" id="form-index">Last name</label>
+              </div>
+            </div>
+          </div>
+        
+        
+          <div class="form-outline mb-4">
+            <input type="email" id="form-input"  class="form-control" />
+            <label class="form-label text-light fw-bold" for="form6Example5" id="form-index">Email</label>
+          </div>
+        
+          <div class="form-outline mb-4">
+            <input type="number" id="form-input" class="form-control" />
+            <label class="form-label text-light fw-bold" for="form6Example6" id="form-index">Phone</label>
+          </div>
+        
+          <div class="form-outline mb-4">
+            <textarea class="form-control"  id="form-input" rows="4"></textarea>
+            <label class="form-label text-light fw-bold" for="form6Example7" id="form-index">Additional information</label>
+          </div>
+
+          <button type="submit" class="btn btn-block mb-4 w-100" id="submit">
+            <p class="h4 m-0">Submit</p></button>
+        </form> -->
+  </div>
+</div>
+<!---/SECTION-->
+
+<!---FOOTER-->
+<div class="container-fluid bg-light">
+  <div class="container" id="email-send">
+    <footer class="pt-5">
+      <div class="row">
+        
+              <div class="col-6 col-md-2 mb-3">
+                  <h5 class="text-dark fw-bold fst-italic">Services</h5>
+                  <ul class="nav flex-column">
+                      <li class="nav-item mb-2 fw-semibold"><a href="carrers" class="nav-link p-0 text-muted">Contact Us</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="carrers" class="nav-link p-0 text-muted">Get Quote</a></li>
+                  </ul>
+              </div>
+              
+              <div class="col-6 col-md-2 mb-3">
+                  <h5 class="text-dark fw-bold fst-italic">Work With Us</h5>
+                  <ul class="nav flex-column">
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Contact Us</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Apply</a></li>
+                  </ul>
+              </div>
+              
+              <div class="col-md-6 offset-md-1 mb-3">
+                  <form method="POST" <?php if(!empty($errors['email-send'])):?> action="form-input" <?php endif; ?>>
+                      <h5>Get in touch</h5>
+                      <p>Insert your email to contact you:</p>
+                      <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                        <form method="POST">
+                          <label for="newsletter1" class="visually-hidden">Email address</label>
+                          <input id="form-input" id="newsletter1" type="text" class="form-control" name="email" placeholder="Email address">
+                          <button class="btn" id='submit-email' type="submit"> <p class="fw-semibold m-0">Submit</p> </button>
+                        </form>
+                      </div>
+                      <?php if(!empty($errors['email'])): ?>
+                      <div id="form-contact" class="form-text text-danger fw-semibold"> First Name is Required</div>
+                      <?php endif; ?>
+                  </form>
+                
+                <div class="row text-center pt-4">
+                  <div class="col">
+                    <p class="top">
+                      <i class="fa fa-home text-secondary"></i>
+                      <span class="fw-bold text-secondary">500 Winderley Place, Suite 218, Maitland FL 32751</span>
+                    </p>
+                  </div>
+                </div>
+                
+                <div class="row text-center">
+                  <div class="col-sm">
+                    <p class="top">
+                      <i class="fa fa-envelope-o text-secondary"></i>
+                      <a href="mailto:jobs@spmconstructions.com">
+                        <span class="fw-bold text-secondary">jobs@spmconstructions.com</span>
+                      </a>
+                    </p>
+                  </div>
+                  <div class="col-sm pr-3">
+                    <p class="top">
+                      <i class="fa fa-phone text-secondary"></i>
+                      <a  href="tel:4079511386">
+                      <span class="fw-bold text-secondary">+1 (407) 951-1386</span>
+                      </a>
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
+            <p>© Sunshine Project Management.</p>
+            <ul class="list-unstyled d-flex">
+              <a href="https://www.facebook.com/SunshineProjectManagement"> <i class="fa fa-facebook text-dark m-3"></i></a>
+              <a href="https://www.instagram.com/sunshineprojectmanagement"> <i class="fa fa-instagram text-dark m-3"></i></a>
+              <a href="https://www.linkedin.com/company/sunshine-project-management"> <i class="fa fa-linkedin text-dark m-3"></i></a>
+            </ul>
+            
+          </div>
+        </footer>
+      </div>
+    </div>
+  <!---/FOOTER-->
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="assets/js/app.js"></script>     
+    
+    <!-- 
+      <script src="assets/js/bootstrap.min.js"></script>     
+      <script src="assets/js/jquery.js"></script>     
+      <script src="assets/js/owl.carousel.min.js"></script>     
+      
+      <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    -->
+    
+  </body>
 </html>
+

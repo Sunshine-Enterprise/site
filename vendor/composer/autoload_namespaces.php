@@ -6,4 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Thybag' => array($vendorDir . '/thybag/php-sharepoint-lists-api/src'),
 );

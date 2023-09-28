@@ -9,7 +9,7 @@
 
         define('DBUSER', 'root');
         define('DBPASS', '');
-        define('DBNAME', 'seu_usa');
+        define('DBNAME', 'spm_2');
         define('DBHOST', 'localhost');
     }
 

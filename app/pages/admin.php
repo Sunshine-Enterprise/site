@@ -1,285 +1,242 @@
 <?php
-if(!login_status())
-{
-//  redirect('login');
-header('Location: /login' );
-}
+  if(!empty($_POST)){
+    $errors = [];
+    $_SESSION['login'] ='<div class="alert alert-success alert-dismissible fade show text-center mt-3" role="alert">
+    <strong>Welcome Again</strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    </button>
+  </div>';
+  $query = "SELECT * FROM users where email = :email limit 1";
+  $row = query($query, ['email'=>$_POST['email']]);
+  if($row)
+  {
+    $data = [];
+    if(password_verify($_POST['password'], $row[0]['password']))
+    {
+       authenticate($row[0]);
+         header('Location: /administrador/admin-jobs' );
+      }else{
+        $errors['password'] = "Please verify your email";
+      }
 
-  //define as a root page
-  $section = $url[1] ?? 'home';
-          
-  //define the new action pages on Array
-  $action = $url[2] ?? 'view';
-  
-  // id for edit and delete
-  $id = $url[3] ?? '0';
-
-  $filename = "../app/pages/admin/".$section.".php";
-  if(!file_exists($filename)){
-    $filename = "../app/pages/admin/404.php";
+  } {
+    $errors['email'] =  "Please verify your password";
   }
-
-  // copy signup validation
-  //----------------------------
-
-if($section == 'users'){
-require_once '../app/pages/admin/users-controller.php';
-
-}else
-if($section =='industries'){
-  require_once '../app/pages/admin/industries-controller.php';
-
-}else
-if($section =='jobs'){
-  require_once '../app/pages/admin/jobs-controller.php';
-
-}
-if($section =='team'){
-  require_once '../app/pages/admin/team-controller.php';
-
-}
-if($section =='download'){
-  require_once '../app/pages/admin/download.php';
-
-}
-
+  }
 ?>
-
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sunshine Project Management</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
 
-  <meta charset="utf-8">
-  <title>Sunshine</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
-  <!-- ** Mobile Specific Metas ** -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Agency HTML Template">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+   </head>
+  <body>
+    <!---NAVBAR-->
+    <nav class="top-nav" id="home">
+        <div class="container">
+          <div class="row justify-content-between">
+            <div class="col-auto">
+            <!--<p class="top">
+                  <i class="fa fa-envelope text-dark"></i>
+                  <span>executive@spmconstructions.com</span>
+                </p>-->
+                <p class="top">
+                  <i class="fa fa-volume-control-phone text-dark"></i>
+                  <span class="fw-bold">(407)-768-1231</span>
+                </p>
+            </div>
+            <div class="col-auto">
+                <div class="social">
+                 <a href="https://www.facebook.com/SunshineProjectManagement"> <i class="fa fa-facebook text-dark"></i></a>
+                 <a href="https://www.instagram.com/sunshineprojectmanagement"> <i class="fa fa-instagram text-dark"></i></a>
+                 <a href="https://www.linkedin.com/company/sunshine-project-management"> <i class="fa fa-linkedin text-dark"></i></a>
+                </div>
+            </div>
 
-	<!-- favicon -->
-	<link href="<?=ROUTE?>/assets/image/favicons/android-chrome-144x144.png" rel="shortcut icon">
+          </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="<?=ROUTE?>"><span></span><img src="assets/img/spmlogo_new.png" alt="" width="50px" height="100px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Services
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="services">Concrete</a></li>
+                <li><a class="dropdown-item" href="services">Masonry</a></li>
+                <li><a class="dropdown-item" href="services">Demolition</a></li>
+                <li><a class="dropdown-item" href="services">OutDoor Design</a></li>
+                <li><a class="dropdown-item" href="services">Landscaping</a></li>
+              </ul>
+            </li>
 
-	<!-- 
-	Essential stylesheets
-	=====================================-->
-	<link href="<?=ROUTE?>/assets/plugins/bootstrap/bootstrap.min.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/bootstrap/bootstrap-slider.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/slick/slick.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/slick/slick-theme.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/css/styles_sunshine.css" rel="stylesheet">
-	<link href="<?=ROUTE?>/assets/css/style.css" rel="stylesheet">
-	<!-----CALL TO SUMMER NOTE--------->
-  <link href="<?=ROUTE?>/assets/summernote/summernote-lite.min.css" rel="stylesheet">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="about" id="menu">About</a>
+            </li>
 
-</head>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="team" id="menu">Team</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="projects" id="menu">Projects</a>
+            </li>
 
-<body class="body-wrapper">
-<header>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<nav class="navbar navbar-expand-lg navbar-light navigation">
-					<a class="navbar-brand" href="<?=ROUTE?>/admin/home">
-						<img src="<?=ROUTE?>/assets/image/logos/logo1.png" alt="">
-					</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav ml-auto main-nav ">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="carrers" id="menu">Carrers</a>
+            </li>
 
-							<li class="nav-item dropdown dropdown-slide @@dashboard">
-								<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#!">Users<span><i class="fa fa-angle-down"></i></span>
-								</a>
-
-								<!-- Dropdown list -->
-								<ul class="dropdown-menu">
-								<li><a class="dropdown-item @@dashboardPage" href="<?=ROUTE?>/admin/users"><i class="fa fa-user-circle"></i> Registered Users </a></li>
-									<li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/employeers"><i class="fa fa-users"></i> Employeers </a></li>
-                  <li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/employeers"><i class="fa fa-users"></i> Recluiters </a></li>
-								</ul>
-                
-							</li>
-							
-              <li class="nav-item dropdown dropdown-slide @@dashboard">
-								<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#!">Services<span><i class="fa fa-angle-down"></i></span>
-								</a>
-
-								<!-- Dropdown list -->
-								<ul class="dropdown-menu">
-								<li><a class="dropdown-item @@dashboardPage" href="<?=ROUTE?>/admin/message"><i class="fa fa-envelope"></i> Send Email</a></li>
-									<li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/notifications"><i class="fa fa-phone"></i> Send Text Message</a></li>
-									<li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/information"><i class="fa fa-info-circle"></i> Search information </a></li>
-								</ul>
-                
-							</li>
-              
-              <li class="nav-item dropdown dropdown-slide @@dashboard">
-								<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#!">Actions<span><i class="fa fa-angle-down"></i></span>
-								</a>
-
-								<!-- Dropdown list -->
-								<ul class="dropdown-menu">
-								<li><a class="dropdown-item @@dashboardPage" href="<?=ROUTE?>/admin/visits"><i class="fa fa-male"></i> Office Visitors</a></li>
-									<li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/requests"><i class="fa fa-bolt"></i> Talent Requests</a></li>
-									<li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/aplications"><i class="fa fa-address-card"></i> Job Aplications</a></li>
-								</ul>
-                
-							</li>
-              <li class="nav-item dropdown dropdown-slide @@dashboard">
-								<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#!">Website<span><i class="fa fa-angle-down"></i></span>
-								</a>
-
-								<!-- Dropdown list -->
-								<ul class="dropdown-menu">
-								<li><a class="dropdown-item @@dashboardPage" href="<?=ROUTE?>/admin/industries"><i class="fa fa-bullhorn"></i> Industries</a></li>
-									<li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/jobs"><i class="fa fa-bullhorn"></i> Jobs</a></li>
-									<li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/blog"><i class="fa fa-bullhorn"></i> Blog</a></li>
-									<li><a class="dropdown-item @@dashboardMyAds" href="<?=ROUTE?>/admin/team"><i class="fa fa-bullhorn"></i> Team</a></li>
-								</ul>
-                
-							</li>
-						</ul>
-						<ul class="navbar-nav ml-auto mt-10">
-							<li class="nav-item">
-								<a class="nav-link login-button" href="<?=ROUTE?>/logout">Log out</a>
-							</li>
-						</ul>
-					</div>
-				</nav>
-			</div>
-		</div>
-	</div>
-</header>
-
-
-
-<section class="dashboard section">
-
-        <!-- Dashboard Links -->
-
-        <?php
-            //here is starts the crud
-            require_once $filename;
+            <li class="nav-item">
+              <a class="btn btn-brand" aria-current="page" href="request" id="menu">Contact Us</a>
+            </li>
+            
+          </ul>
           
-        ?>
+        </div>
+      </div>
+    </nav>
 
-</section>
-<section class="dashboard section">
+    <!---/NAVBAR-->
+       <!---SECTION-->
+    <section class="bg-cover pt-5 shadow-2">
+        <div class="container">
+            <div class="">
+                
+                <div class="row justify-content-center">
+                    
+                    <div class="col-12 col-lg-5 mb-5 bg-light rounded">
+                        <h3 class="h4 text-center pb-2 mt-0 text-gray py-3">SPM</h3>
+                        <p class="text-center display-5 h6" id="subtitle-about">Admin Panel</p>
+                  <!----------------------------------------------------->
+                  <form class="mb-4" method="post">
+                        <!-- Email input -->
+                        <div class="form-outline py-3">
+                        <input type="email" name="email" id="form2Example1" class="form-control" placeholder="Enter your email" />
+                        </div>
+                        <!-- Password input -->
+                        <div class="form-outline py-3">
+                        <input type="password" name="password" id="form2Example2" class="form-control" placeholder="Enter your password"/>
+                        </div>
 
-        <!-- Dashboard Links -->
+                        <!-- 2 column grid layout for inline styling -->
+                        <div class="row mb-4">
+                        <div class="col d-flex justify-content-center">
+                            <!-- Checkbox -->
 
+                        </div>
 
+                        </div>
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-warning btn-block w-100 mb-4 fw-bold">Sign in</button>
+                    </form>
+                  <!----------------------------------------------------->
+                </div>
+              </div>
 
-</section>
+        </div>
+      </div>
+  </section>
+    <!---/SECTION-->
 
-
-<!--============================
-=            Footer            =
-=============================-->
-
-<footer class="footer section section-sm">
-  <!-- Container Start -->
+<!---FOOTER-->
+<div class="container-fluid bg-light">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-3 col-md-7 offset-md-1 offset-lg-0 mb-4 mb-lg-0">
-        <!-- About -->
-        <div class="block about">
-          <!-- footer logo -->
-          <img src="<?=ROUTE?>/assets/image/logos/logo-dark1.png" alt="logo">
-          <!-- description -->
-          <p class="alt-color">500 Winderley Place, Suite 218, Maitland, FL 32751</p>
-        </div>
-      </div>
-      <?php if(login_status()):?>
-      <!-- Link list -->
-      <div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
-        <div class="block">
-          <h4>Our Services</h4>
-          <ul>
-            <li><a href="<?=ROUTE?>/admin/users">Users</a></li>
-            <li><a href="<?=ROUTE?>/admin/Industries">Industries</a></li>
-            <li><a href="<?=ROUTE?>/admin/jobs">Jobs</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
-        <div class="block">
-          <h4>User Areas</h4>
-          <ul>
-            <li><a href="<?=ROUTE?>/admin/aplications">Aplications</a></li>
-            <li><a href="<?=ROUTE?>/admin/profile">Profile</a></li>
-          </ul>
-        </div>
-      </div>
-      <?php  endif;?>
-    </div>
-  </div>
-  <!-- Container End -->
-</footer>
-<!-- Footer Bottom -->
-<footer class="footer-bottom">
-  <!-- Container Start -->
-  <div class="container">
+    <footer class="pt-5">
       <div class="row">
-          <div class="col-lg-6 text-center text-lg-left mb-3 mb-lg-0">
-            <!-- Copyright -->
-            <div class="copyright">
-            <p>Copyright &copy; <?php echo date("Y")?> Designed & Developed by <a class="text-white" href="#">Sunshine</a></p>
+        
+              <div class="col-6 col-md-2 mb-3">
+                  <h5 class="text-dark fw-bold fst-italic">Services</h5>
+                  <ul class="nav flex-column">
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Concrete</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Masonry</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Pavers</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Demolition</a></li>
+                      <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Design</a></li>
+                  </ul>
+              </div>
+              
+              <div class="col-6 col-md-2 mb-3">
+                  <h5 class="text-dark fw-bold fst-italic">Careers</h5>
+                  <ul class="nav flex-column">
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Concrete</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Features</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">Pricing</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">FAQs</a></li>
+                  <li class="nav-item mb-2 fw-semibold"><a href="#" class="nav-link p-0 text-muted">About</a></li>
+                  </ul>
+              </div>
+              
+              <div class="col-md-6 offset-md-1 mb-3">
+                  <form>
+                      <h5>Get in touch</h5>
+                      <p>Insert your email to contact you:</p>
+                      <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                          <label for="newsletter1" class="visually-hidden">Email address</label>
+                          <input id="form-input" id="newsletter1" type="text" class="form-control" placeholder="Email address">
+                          <button class="btn" id='submit-email' type="button"> <p class="fw-semibold m-0">Submit</p> </button>
+                      </div>
+                  </form>
+                
+                <div class="row text-center pt-4">
+                  <div class="col">
+                    <p class="top">
+                      <i class="fa fa-home text-secondary"></i>
+                      <span class="fw-bold text-secondary">500 Winderley Place, Suite 218, Maitland FL 32751</span>
+                    </p>
+                  </div>
+                </div>
+                
+                <div class="row text-center">
+                  <div class="col-sm">
+                    <p class="top">
+                      <i class="fa fa-envelope-o text-secondary"></i>
+                      <span class="fw-bold text-secondary">jobs@spmconstructions.com</span>
+                    </p>
+                  </div>
+                  <div class="col-sm pr-3">
+                    <p class="top">
+                      <i class="fa fa-phone text-secondary"></i>
+                      <span class="fw-bold text-secondary">+1 (407) 951-1386</span>
+                    </p>
+                  </div>
+
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col-lg-6">
-              <ul class="social-media-icons text-center text-lg-right">
-                <li><a class="fa fa-linkedin" href=""></a></li>
-                <li><a class="fa fa-facebook" href=""></a></li>
-                <li><a class="fa fa-twitter" href=""></a></li>
-                <li><a class="fa fa-instagram" href=""></a></li>
-              </ul>
+          
+          <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
+            <p>© Sunshine Project Management.</p>
+            <ul class="list-unstyled d-flex">
+              <a href="https://www.facebook.com/SunshineProjectManagement"> <i class="fa fa-facebook text-dark m-3"></i></a>
+              <a href="https://www.instagram.com/sunshineprojectmanagement"> <i class="fa fa-instagram text-dark m-3"></i></a>
+              <a href="https://www.linkedin.com/company/sunshine-project-management"> <i class="fa fa-linkedin text-dark m-3"></i></a>
+            </ul>
+            
           </div>
+        </footer>
       </div>
-  </div>
-  <!-- Container End -->
-  <!-- To Top -->
-  <div class="scroll-top-to">
-    <i class="fa fa-angle-up"></i>
-  </div>
-</footer>
-
-<!-- 
-Essential Scripts
-=====================================-->
-<script src="<?=ROUTE?>/assets/plugins/jquery/jquery.min.js"></script>
-<script src="<?=ROUTE?>/assets/plugins/bootstrap/popper.min.js"></script>
-<script src="<?=ROUTE?>/assets/plugins/bootstrap/bootstrap.min.js"></script>
-<script src="<?=ROUTE?>/assets/plugins/bootstrap/bootstrap-slider.js"></script>
-<script src="<?=ROUTE?>/assets/plugins/tether/js/tether.min.js"></script>
-<script src="<?=ROUTE?>/assets/plugins/raty/jquery.raty-fa.js"></script>
-<script src="<?=ROUTE?>/assets/plugins/slick/slick.min.js"></script>
-<script src="<?=ROUTE?>/assets/plugins/jquery-nice-select/js/jquery.nice-select.min.js"></script>
-<!-- google map -->
-<script src="<?=ROUTE?>/assets/plugins/google-map/map.js" defer></script>
-
-<script src="<?=ROUTE?>/assets/js/script.js"></script>
-<script src="<?=ROUTE?>/assets/summernote/summernote-lite.min.js"></script>
-
-<script>
-$(document).ready(function() {
-  $('#summernote').summernote();
-});
-</script>
-
+    </div>
+  <!---/FOOTER-->
 </body>
-
-<style>/:focus{
-    border-color: #ffc107;
-    box-shadow: 0 0 0 0.2rem rgba(247, 228, 130, 0.84);
-
-  }
-</style>
-
 </html>
